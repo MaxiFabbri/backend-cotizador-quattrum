@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 
+
 const collection = 'Quotations';
 
 const schema = new mongoose.Schema({
