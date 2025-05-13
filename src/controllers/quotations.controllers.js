@@ -20,9 +20,7 @@ async function readQuotationByIdPopulated(req, res) {
 }
 async function readQuotationPopulatedByCustomerName(req, res) {
     const name = req.query.name;
-    console.log("Quotations Controllers name recieved: ",name);
     try {
-        
         // Busco el customer por name recibido en la consulta
         const customers = await customerService.getCustomerByNameOrCode(name);
         // Recivo los customers que coinciden con el name
