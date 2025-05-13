@@ -14,7 +14,7 @@ class GeneralParametersApiRouter extends CustomRouter {
     }
     init = () => {
         this.create("/", ["ADMIN"], createGeneralParameters);
-        this.read("/", ["ADMIN"], readGeneralParameters);
+        this.read("/", ["PUBLIC"], readGeneralParameters);
         this.update("/:id", ["ADMIN"], updateGeneralParameters);
         this.destroy("/:id", ["ADMIN"], destroyGeneralParameters);      
     };
