@@ -8,7 +8,7 @@ import {
     readQuotationById,
     updateQuotation, 
     destroyQuotation 
-} from "../../controllers/Quotations.controllers.js";
+} from "../../controllers/quotations.controllers.js";
 
 
 class QuotationsApiRouter extends CustomRouter {
