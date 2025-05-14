@@ -16,11 +16,13 @@ const PORT = process.env.PORT||8080;
 
 // CORS
 const corsOptions = {
-    origin: ['http://localhost:5173', 'https://quattrum-cotizador.vercel.app/'],
-    credentials: true
-  };
+  origin: ['http://localhost:5173', 'https://quattrum-cotizador.vercel.app'],
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
 app.use(cors(corsOptions));
-// app.use(cors());
+
 
 const ready = () => {
     console.log("Server ready on port: ",PORT);
