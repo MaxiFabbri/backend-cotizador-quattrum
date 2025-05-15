@@ -8,7 +8,7 @@ function login(req, res, next) {
   const opts = { 
     maxAge: 1000 * 60 * 60 * 24 * 14 ,
     httpOnly: true,
-    sameSite: "none",
+    sameSite: "strict",
     secure: true,
     domain: "backend-cotizador-quattrum.onrender.com"
   };
