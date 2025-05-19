@@ -8,9 +8,9 @@ function login(req, res, next) {
   const opts = { 
     maxAge: 1000 * 60 * 60 * 24 * 14 ,
     httpOnly: true,
-    sameSite: "strict",
+    sameSite: "none",
     secure: true,
-    domain: "https://quattrum-cotizador.vercel.app/"
+    domain: "backend-cotizador-quattrum.onrender.com"
   };
   const message = "User logged in!";
   const response = "OK";
