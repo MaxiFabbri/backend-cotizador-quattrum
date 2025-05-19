@@ -27,7 +27,7 @@ app.use(cors(corsOptions));
 const ready = () => {
     console.log("Server ready on port: ",PORT);
     dbConnect()
-    console.log("mongodb connected");
+    console.log("mongodb connected successfully");
 }
 
 app.listen(PORT, ready)
