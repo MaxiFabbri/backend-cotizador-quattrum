@@ -34,8 +34,6 @@ async function readQuotationPopulatedByCustomerName(req, res) {
         console.error('Error al obtener cotizaciones:', error);
         return [];
     }
-    // console.lo
-    // return []
 }
 
 async function readQuotationPopulated(req, res) {

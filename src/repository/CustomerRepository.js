@@ -14,6 +14,15 @@ export default class CustomerRepository extends GenericRepository{
     getCustomerById = (id) =>{
         return this.getBy({_id:id})
     }
+    getSomeCustomersPopulated = (name) =>{
+        return this.dao.getSomeCustomersWithPaymentMethods({
+            $or: [
+                { name: { $regex: name, $options: "i" } }, // Coincidencias parciales en "name"
+                { code: { $regex: name, $options: "i" } }  // Coincidencias parciales en "code"
+            ]
+        })
+    }
+
     getCustomerByNameOrCode = (name) =>{  
         return this.getAll({
             $or: [

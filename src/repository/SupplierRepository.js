@@ -15,6 +15,15 @@ export default class SupplierRepository extends GenericRepository{
         return this.getAll({
             $or: [
                 { name: { $regex: name, $options: "i" } }, // Coincidencias parciales en "name"
+                { code: { $regex: name, $options: "i" } }  // Coincidencias parciales en "code"
+            ]
+        })
+    }
+    getSomeSuppliersPopulated = (name) =>{
+        return this.dao.getSomeSuppliersWithPaymentMethods({
+            $or: [
+                { name: { $regex: name, $options: "i" } }, // Coincidencias parciales en "name"
+                { code: { $regex: name, $options: "i" } }  // Coincidencias parciales en "code"
             ]
         })
     }

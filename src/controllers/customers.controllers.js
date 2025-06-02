@@ -13,8 +13,9 @@ async function readCustomer(req, res) {
     return res.status(200).json({ response, message });
 }
 async function readCustomerPopulated(req, res) {
+    const name = req.query.name;
     const message = "CUSTOMERS POPULATED FOUND";
-    const response = await customerService.getAllCustomersPopulated();
+    const response = await customerService.getSomeCustomersPopulated(name);
     return res.status(200).json({ response, message });
 }
 async function readCustomerById(req, res) {

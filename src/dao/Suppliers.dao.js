@@ -10,6 +10,14 @@ export default class Suppliers {
         return supplier.findOne(params);
     }
 
+    getSomeSuppliersWithPaymentMethods = (params) =>{
+        return supplier.find(params)
+            .populate({
+                path: 'supplierPaymentMethodId',
+                select: 'supplier_payment_description'
+            })
+    }
+
     save = (doc) =>{
         return supplier.create(doc);
     }

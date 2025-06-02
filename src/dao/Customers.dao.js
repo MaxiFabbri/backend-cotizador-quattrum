@@ -6,6 +6,14 @@ export default class Customers {
     get = (params) =>{
         return customerModel.find(params);
     }
+    
+    getSomeCustomersWithPaymentMethods = (params) =>{
+        return customerModel.find(params)
+            .populate({
+                path: 'customerPaymentMethodId',
+                select: 'customer_payment_description'
+            })
+    }
     getCustomersWithPaymentMethods = () =>{
         return customerModel.find()
             .populate({
