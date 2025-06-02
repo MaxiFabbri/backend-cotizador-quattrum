@@ -1,3 +1,5 @@
+import envUtil from "../utils/env.util.js";
+
 function register(req, res, next) {
   const { _id } = req.user;
   const message = "User Registered!";
@@ -10,8 +12,8 @@ function login(req, res, next) {
     httpOnly: true,
     sameSite: "none",
     secure: true,
-    domain: "backend-cotizador-quattrum.onrender.com"
   };
+  console.log("LOGIN: ", req.user, token);
   const message = "User logged in!";
   const response = "OK";
   return res.cookie("token", token, opts).json200(response, message);
