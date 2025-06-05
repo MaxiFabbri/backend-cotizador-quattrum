@@ -13,7 +13,6 @@ function login(req, res, next) {
     sameSite: "none",
     secure: true,
   };
-  console.log("LOGIN: ", req.user, token);
   const message = "User logged in!";
   const response = "OK";
   return res.cookie("token", token, opts).json200(response, message);

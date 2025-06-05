@@ -14,6 +14,9 @@ export default class CustomerRepository extends GenericRepository{
     getCustomerById = (id) =>{
         return this.getBy({_id:id})
     }
+    getCustomerByIdPopulated = (id) =>{
+        return this.dao.getOneCustomerWithPaymentMethod({_id:id})
+    }
     getSomeCustomersPopulated = (name) =>{
         return this.dao.getSomeCustomersWithPaymentMethods({
             $or: [

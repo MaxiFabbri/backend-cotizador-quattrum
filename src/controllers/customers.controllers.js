@@ -21,7 +21,16 @@ async function readCustomerPopulated(req, res) {
 async function readCustomerById(req, res) {
     const { id } = req.params;
     const message = "CUSTOMER FOUND";
-    const response = await customerService.getCustomerById(id);
+    const response = await customerService.getCustomerByIdPopulated(id);
+    return res.status(200).json({ response, message });
+}
+async function readCustomerByName(req, res) {
+    const { name } = req.params;
+    var message = "CUSTOMERS FOUND";
+    const response = await customerService.getBy({"name":name});
+    if (!response) { 
+        message = "CUSTOMER NOT FOUND";
+    }
     return res.status(200).json({ response, message });
 }
 async function readCustomerByNameOrCode(req, res) {
@@ -50,6 +59,7 @@ export {
     readCustomer,
     readCustomerPopulated,
     readCustomerById,
+    readCustomerByName,
     readCustomerByNameOrCode,
     updateCustomer, 
     destroyCustomer 
