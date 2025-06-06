@@ -12,6 +12,7 @@ function login(req, res, next) {
     httpOnly: true,
     sameSite: "none",
     secure: true,
+    domain: envUtil.COOKIES_DOMAIN,
   };
   const message = "User logged in!";
   const response = "OK";
