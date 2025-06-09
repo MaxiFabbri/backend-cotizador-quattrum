@@ -8,7 +8,7 @@ function register(req, res, next) {
 function login(req, res, next) {
   const { token } = req.user;
   const opts = { 
-    maxAge: 1000 * 60 * 60 * 24 * 14 ,
+    maxAge: 1000 * 60 * 60 * 12,
     httpOnly: true,
     sameSite: "none",
     secure: true,
