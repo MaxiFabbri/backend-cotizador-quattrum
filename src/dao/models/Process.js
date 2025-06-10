@@ -23,11 +23,21 @@ const schema = new mongoose.Schema({
         type: Number,
         required: false
     },
+    currency: {
+        type: String,
+        required: true,
+        enum: ['Dolar', 'Peso'],
+        default: 'Peso',
+    },
     unitCost: {
         type: Number,
         required: true
     },
     fixedCost: {
+        type: Number,
+        required: true
+    },
+    adjustPercentage: {
         type: Number,
         required: true
     },
