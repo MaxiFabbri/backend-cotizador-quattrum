@@ -29,9 +29,10 @@ passport.use("register",
                     password: hashedPassword,
                     first_name: req.body.first_name || "First Name",
                     last_name: req.body.last_name || "Last Name",
+                    role: req.body.role || "USER",
                     verifyCode
                 });
-                await sendVerifyEmail({ to: email, verifyCode })
+                // await sendVerifyEmail({ to: email, verifyCode })
                 return done(null, user);
             } catch (error) {
                 return done(error);
@@ -42,22 +43,13 @@ passport.use("register",
 passport.use("login",
     new LocalStrategy({ usernameField: "email" },
         async (email, password, done) => {
+            console.log("Login Strategy: ", email, password)
             try {
                 const user = await usersService.getUserByEmail(email);
                 if (!user) {
                     const info = { message: "USER NOT FOUND", statusCode: 401 };
                     return done(null, false, info);
                 }
-                // Verifico si el Usuario ya esta registrado
-                // if (!user.verifiedUser) {
-                //     // vuelvo a enviar el mail con el código de verificación
-                //     const verifyCode = user.verifyCode
-                //     console.log("Verify Code: ", verifyCode)
-                //     //await sendVerifyEmail({ to: email, verifyCode })
-                //     const info = { message: "Please, verify your account. A new email has been sent" }
-                //     return done(null, false, info)
-                // }
-
                 // Verifico la contraseña
                 const passwordForm = password;
                 const passwordDb = user.password;
@@ -98,6 +90,8 @@ passport.use("admin",
         }
     )
 );
+// Acá puedo controlar otros Roles
+
 passport.use("online",
     new JwtStrategy({
         jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
@@ -136,30 +130,66 @@ passport.use("signout",
         }
     )
 );
-passport.use("resetPassword",
-    new LocalStrategy({ passReqToCallback: true, usernameField: "email" },
-        async (req, email, password, done) => {
+passport.use("updatePassword",
+    new JwtStrategy({
+        jwtFromRequest: ExtractJwt.fromExtractors([(req) => req?.cookies?.token]),
+        secretOrKey: envUtil.SECRET_KEY,
+        passReqToCallback: true
+    },
+        async (req, jwtPayload, done) => {
             try {
-                // Busco el usuario
-                const user = await usersService.getUserByEmail(email);
+                const { user_id } = jwtPayload;
+                const user = await usersService.getUserById(user_id);
                 if (!user) {
-                    const info = { message: "USER DOESN'T EXIST", statusCode: 401 };
+                    const info = { message: "USER NOT FOUND", statusCode: 401 };
                     return done(null, false, info);
                 }
-                // genero una nueva PW
-                console.log("Dentro de Reset New Password: ", password)
-                const hashedPassword = createHashUtil(password);
-                // grabo la NuevaPW en la persistencia
-                await updateUserService(user._id, { password: hashedPassword })
-                // Envio un mail al usuario con la nueva PW 
-                await sendResetPasswordEmail({ to: email, password })
-                return done(null, user);
+                // Verifico la contraseña
+                const passwordForm = req.body.oldPassword;
+                const passwordDb = user.password;
+                const verify = verifyHashUtil(passwordForm, passwordDb);
+                console.log("Verify: ",verify)
+                if (!verify) {
+                    const info = { message: "INVALID CREDENTIALS", statusCode: 401 };
+                    return done(null, false, info);
+                } else {
+                    const hashedPassword = createHashUtil(req.body.newPassword);
+                    const response = await usersService.update(user_id, { password: hashedPassword });
+                    return done(null, response);
+                }
             } catch (error) {
                 return done(error);
             }
+            return done(null, jwtPayload);
         }
     )
 );
+
+
+passport.use("resetPassword",
+        new LocalStrategy({ passReqToCallback: true, usernameField: "email" },
+            async (req, email, password, done) => {
+                try {
+                    // Busco el usuario
+                    const user = await usersService.getUserByEmail(email);
+                    if (!user) {
+                        const info = { message: "USER DOESN'T EXIST", statusCode: 401 };
+                        return done(null, false, info);
+                    }
+                    // genero una nueva PW
+                    console.log("Dentro de Reset New Password: ", password)
+                    const hashedPassword = createHashUtil(password);
+                    // grabo la NuevaPW en la persistencia
+                    await updateUserService(user._id, { password: hashedPassword })
+                    // Envio un mail al usuario con la nueva PW 
+                    await sendResetPasswordEmail({ to: email, password })
+                    return done(null, user);
+                } catch (error) {
+                    return done(error);
+                }
+            }
+        )
+    );
 passport.use("google", new GoogleStrategy(
     {
         clientID: GOOGLE_CLIENT_ID,

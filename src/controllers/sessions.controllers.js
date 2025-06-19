@@ -16,7 +16,7 @@ function login(req, res, next) {
   };
   const message = "User logged in!";
   const response = "OK";
-  return res.cookie("token", token, opts).json200(response, message);
+  return res.cookie("token", token, opts).json200({response, message, role: req.user.role,})
 }
 function signout(req, res, next) {
   const message = "User signed out!";
@@ -39,8 +39,17 @@ async function online(req, res, next) {
   return res.status(200).json({
     message: req.user.email.toUpperCase() + " IS ONLINE",
     online: true,
+    role: req.user.role,
   });
 }
+async function updatePassword(req, res, next) {
+  console.log("UPDATE PASSWORD ",req.body)
+  const { _id } = req.user;
+  const message = "Password Updated!";
+  return res.json201(_id, message);
+}
+
+
 // async function verify(req, res, next) {
 //   const { email, verifyCode } = req.body
 //     const response = await verifyUserService(email, verifyCode)
@@ -58,4 +67,4 @@ async function resetPassword(req, res, next) {
 
 }
 
-export { register, login, signout, google, online, resetPassword }
+export { register, login, signout, updatePassword, google, online, resetPassword }
