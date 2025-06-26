@@ -3,6 +3,8 @@ import {
     createSupplier,
     readSupplier,
     readSupplierById,
+    readSupplierByNameOrCode,
+    readSupplierPopulated,
     readSupplierByName,
     updateSupplier,
     destroySupplier
@@ -16,9 +18,11 @@ class SuppliersApiRouter extends CustomRouter {
         this.init();
     }
     init = () => {
-        this.create("/name", ["USER", "ADMIN"], readSupplierByName);
+        this.create("/name", ["USER", "ADMIN"], readSupplierByNameOrCode);
         this.create("/", ["USER", "ADMIN"], createSupplier);
         this.read("/", ["USER", "ADMIN"], readSupplier);
+        this.read("/name/:name", ["USER", "ADMIN"], readSupplierByName);
+        this.read("/populated/name", ["USER", "ADMIN"], readSupplierPopulated);
         this.read("/:id", ["USER", "ADMIN"], readSupplierById);
         this.update("/:id", ["USER", "ADMIN"], updateSupplier);
         this.destroy("/:id", ["USER", "ADMIN"], destroySupplier);      

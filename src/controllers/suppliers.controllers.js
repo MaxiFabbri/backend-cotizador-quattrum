@@ -15,10 +15,10 @@ async function readSupplier(req, res) {
 async function readSupplierById(req, res) {
     const { id } = req.params;
     const message = "SUPPLIER FOUND";
-    const response = await supplierService.getSupplierById(id);
+    const response = await supplierService.getSupplierByIdPopulated(id);
     return res.status(200).json({ response, message });
 }
-async function readSupplierByName(req, res) {
+async function readSupplierByNameOrCode(req, res) {
     const { name } = req.body;
     const message = "SUPPLIER FOUND";
     const response = await supplierService.getSupplierByName(name);
@@ -38,6 +38,18 @@ async function destroySupplier(req, res) {
     const response = await supplierService.delete(id);
     return res.status(200).json({ response, message });
 }
+async function readSupplierPopulated(req, res) {
+    const { name } = req.query;
+    const message = "SUPPLIER POPULATED FOUND";
+    const response = await supplierService.getSomeSuppliersPopulated(name);
+    return res.status(200).json({ response, message });
+}
+async function readSupplierByName(req, res) {
+    const message = "SUPPLIER FOUND";
+    const { name } = req.params;
+    const response = await supplierService.getBy({"name": name});
+    return res.status(200).json({ response, message });
+}
 
 
 export {
@@ -45,6 +57,8 @@ export {
     readSupplier,
     readSupplierById,
     readSupplierByName,
+    readSupplierByNameOrCode,
+    readSupplierPopulated,
     updateSupplier,
     destroySupplier
 }

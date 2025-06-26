@@ -16,7 +16,7 @@ function login(req, res, next) {
   };
   const message = "User logged in!";
   const response = "OK";
-  return res.cookie("token", token, opts).json200({response, message, role: req.user.role,})
+  return res.cookie("token", token, opts).json200({response, message, role: req.user.role, first_name: req.user.first_name})
 }
 function signout(req, res, next) {
   const message = "User signed out!";
@@ -40,6 +40,7 @@ async function online(req, res, next) {
     message: req.user.email.toUpperCase() + " IS ONLINE",
     online: true,
     role: req.user.role,
+    first_name: req.user.first_name,
   });
 }
 async function updatePassword(req, res, next) {

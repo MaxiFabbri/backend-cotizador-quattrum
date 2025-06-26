@@ -43,7 +43,6 @@ passport.use("register",
 passport.use("login",
     new LocalStrategy({ usernameField: "email" },
         async (email, password, done) => {
-            console.log("Login Strategy: ", email, password)
             try {
                 const user = await usersService.getUserByEmail(email);
                 if (!user) {
@@ -61,6 +60,7 @@ passport.use("login",
                 const data = {
                     user_id: user._id,
                     role: user.role,
+                    first_name: user.first_name,
                 };
                 const token = createTokenUtil(data);
                 user.token = token;

@@ -3,7 +3,9 @@ import supplierPaymentMethodModel from "./models/SupplierPaymentMethod.js";
 export default class SupplierPaymentMethods {
     
     get = (params) =>{
-        return supplierPaymentMethodModel.find(params);
+        return supplierPaymentMethodModel.find(params)
+        .sort({ supplier_payment_description: 1 }) 
+        .limit(50);
     }
 
     getBy = (params) =>{

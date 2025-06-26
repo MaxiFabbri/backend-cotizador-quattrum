@@ -14,6 +14,7 @@ async function readCustomer(req, res) {
 }
 async function readCustomerPopulated(req, res) {
     const name = req.query.name;
+    console.log("Customer Controller readCustomerPopulated: ",name)
     const message = "CUSTOMERS POPULATED FOUND";
     const response = await customerService.getSomeCustomersPopulated(name);
     return res.status(200).json({ response, message });

@@ -1,32 +1,41 @@
 import supplier from "./models/Supplier.js";
 
 export default class Suppliers {
-    
-    get = (params) =>{
+
+    get = (params) => {
         return supplier.find(params);
     }
 
-    getBy = (params) =>{
+    getBy = (params) => {
         return supplier.findOne(params);
     }
 
-    getSomeSuppliersWithPaymentMethods = (params) =>{
+    getSomeSuppliersWithPaymentMethods = (params) => {
         return supplier.find(params)
             .populate({
                 path: 'supplierPaymentMethodId',
                 select: 'supplier_payment_description'
             })
+            .sort({ name: 1 }) 
+            .limit(50); 
     }
 
-    save = (doc) =>{
+    getOneSupplierWithPayemntMethod = (params) => {
+        return supplier.findOne(params)
+            .populate({
+                path: 'supplierPaymentMethodId',
+                select: 'supplier_payment_description'
+            })
+    }
+    save = (doc) => {
         return supplier.create(doc);
     }
 
-    update = (id,doc) =>{
-        return supplier.findByIdAndUpdate(id,{$set:doc})
+    update = (id, doc) => {
+        return supplier.findByIdAndUpdate(id, { $set: doc })
     }
 
-    delete = (id) =>{
+    delete = (id) => {
         return supplier.findByIdAndDelete(id);
     }
 }

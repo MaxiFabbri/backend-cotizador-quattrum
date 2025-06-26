@@ -4,7 +4,9 @@ import customerPaymentMethodModel from "./models/CustomerPaymentMethod.js";
 export default class CustomerPaymentMethods {
     
     get = (params) =>{
-        return customerPaymentMethodModel.find(params);
+        return customerPaymentMethodModel.find(params)
+        .sort({ customer_payment_description: 1 }) 
+        .limit(50);
     }
 
     getBy = (params) =>{

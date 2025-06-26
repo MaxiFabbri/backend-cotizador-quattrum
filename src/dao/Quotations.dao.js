@@ -35,6 +35,8 @@ export default class quotations {
                 path: 'customerPaymentMethodId'
             }
         })
+        .sort({ date: -1 }) 
+        .limit(100);
         return response
     }
 

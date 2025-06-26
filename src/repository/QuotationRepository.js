@@ -5,7 +5,7 @@ export default class QuotationRepository extends GenericRepository{
         super(dao);
     }
     getAllQuotationsPopulated = () =>{
-        return this.dao.getQuotationsWithCustomerDetails()
+        return this.dao.getQuotationsWithCustomerDetails() 
     }
     getQuotationsByIdPopulated = (id) =>{
         return this.dao.getOneQuotationByIdwithCustomerDetails(id)
@@ -17,7 +17,7 @@ export default class QuotationRepository extends GenericRepository{
         return this.delete(id)
     }
     getQuotationsFilteredByCustomerIdsPopulated(customerIds){
-        return this.dao.getQuotationsByIdWithCustomerDetails( { customerId: { $in: customerIds } } );
+        return this.dao.getQuotationsByIdWithCustomerDetails( { customerId: { $in: customerIds } } )        
     }
     
 }
