@@ -21,6 +21,10 @@ const schema = new mongoose.Schema({
         type:String,
         required:false,
     },
+    phone:{
+        type:String,
+        required:false
+    },
     supplierPaymentMethodId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SupplierPaymentMethod'
