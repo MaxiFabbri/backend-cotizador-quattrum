@@ -33,7 +33,7 @@ const schema = new mongoose.Schema({
     quoteStatus: {
         type: String,
         required: true,
-        enum: ['Cotizado', 'Enviada', 'Aceptada', 'Rechazada'], // Opciones permitidas
+        enum: ['Cotizado', 'Aprobado', 'En Producción', 'Entregado'], // Opciones permitidas
         default: 'Cotizado',
     },
     quoteProductsDescription: {

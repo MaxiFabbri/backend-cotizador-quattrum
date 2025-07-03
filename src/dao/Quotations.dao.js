@@ -27,6 +27,19 @@ export default class quotations {
             })
     }
 
+    getQuotationsFilteredPopulated = (query) => {
+        const response = quotationModel.find(query)
+        .populate({
+            path: 'customerId',
+            populate: {
+                path: 'customerPaymentMethodId'
+            }
+        })
+        .sort({ date: -1 }) 
+        .limit(100);
+        return response
+    }
+
     getQuotationsByIdWithCustomerDetails = (query) => {
         const response = quotationModel.find(query)
         .populate({

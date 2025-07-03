@@ -35,6 +35,24 @@ async function readQuotationPopulatedByCustomerName(req, res) {
         return [];
     }
 }
+async function readQuotationPopulatedFiltered(req, res) {
+    const name = req.query.name;
+    const quoteStatus = req.query.status || {$in: ['Cotizado', 'Aprobado', 'En Producción', 'Entregado']};
+    console.log("Filtered Route Data: ", name, quoteStatus)
+    try {
+        // Busco el customer por name recibido en la consulta
+        const customers = await customerService.getCustomerByNameOrCode(name);
+        // Recivo los customers que coinciden con el name
+        const customerIds = customers.map(customer => customer._id);
+        // Busco las cotizaciones por customerIds y quoteStatus
+        const response = await quotationService.getQuotationsFilteredPopulated(customerIds, quoteStatus)
+        const message = "QUOTATIONS FOUND";
+        return res.status(200).json({ response, message });
+    } catch (error) {
+        console.error('Error al obtener cotizaciones:', error);
+        return [];
+    }
+}
 
 async function readQuotationPopulated(req, res) {
     const message = "QUOTATIONS FOUND";
@@ -77,6 +95,7 @@ export {
     createQuotation, 
     readQuotation,
     readQuotationPopulated,
+    readQuotationPopulatedFiltered,
     readQuotationByIdPopulated,
     readQuotationPopulatedByCustomerName,
     readQuotationById,
