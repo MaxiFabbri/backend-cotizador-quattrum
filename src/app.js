@@ -12,11 +12,12 @@ import indexRouter from "./routers/index.router.js"
 
 
 const app = express();
-const PORT = process.env.PORT||8080;
+const PORT = process.env.PORT || 8080;
 
 // CORS
 const corsOptions = {
-  origin: ['http://localhost:5173', 'https://quattrum-cotizador.vercel.app'],
+  // origin: ['http://localhost:5173', 'https://quattrum-cotizador.vercel.app'],
+  origin: process.env.FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
   preflightContinue: false,
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -38,6 +39,10 @@ app.listen(PORT, ready)
 app.use('/static', express.static('public'))
 
 // middlewares
+app.get('/api/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
 app.use(addLogger)
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))

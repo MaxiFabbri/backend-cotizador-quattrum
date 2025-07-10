@@ -10,6 +10,7 @@ const envUtil = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID,
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
   BASE_URL: process.env.BASE_URL,
+  FRONTEND_URL: process.env.FRONTEND_URL,
   COOKIES_DOMAIN: process.env.COOKIE_DOMAIN,
 };
 
