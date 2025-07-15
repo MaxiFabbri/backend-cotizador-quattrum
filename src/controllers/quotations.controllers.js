@@ -1,10 +1,27 @@
-import { quotationService, customerService, productService, processService } from "../services/index.service.js";
+import { quotationService, customerService, productService, processService, usersActionsService } from "../services/index.service.js";
 
 
 async function createQuotation(req, res) {
     const message = "QUOTATION CREATED";
-    const data = req.body;
+    const userId = req.user._id; // Obtengo el userId del token
+    const data = {
+        ...req.body,
+        lastModifiedBy: userId
+    }
     const response = await quotationService.create(data);
+    if (!response) {
+        return res.status(400).json({ message: "Error creating quotation" });
+    }
+    // preparo la informacion
+    const action = {
+        userId: userId,
+        action: "CREATE",
+        quotationModifiedId: response._id,
+        oprationSucces: true
+    };
+    // grabo el movimiento
+    await usersActionsService.create(action);
+
     return res.status(201).json({ response, message });
 }
 async function readQuotation(req, res) {
@@ -68,15 +85,34 @@ async function readQuotationById(req, res) {
 }
 
 async function updateQuotation(req, res) {
+    const userId = req.user._id; // Obtengo el userId del token
     const { id } = req.params;
-    const data = req.body;
+    const data = {
+        ...req.body,
+        lastModifiedBy: userId
+    }
     const message = "QUOTATION UPDATED";
     const response = await quotationService.update(id, data);
+    if (!response) {
+        return res.status(404).json({ message: "Quotation not found" });
+    }
+    // Si se actualizó correctamente, Grabo el movimiento en UserActions
+    // preparo la informacion
+    const action = {
+        userId: userId,
+        action: "UPDATE",
+        quotationModifiedId: id,
+        oprationSucces: true
+    };
+    // grabo el movimiento
+    await usersActionsService.create(action);
+    
     return res.status(200).json({ response, message });
 }
 
 async function destroyQuotation(req, res) {
     const { id } = req.params;
+    const userId = req.user._id; // Obtengo el userId del token
     // Busco los products con este quotation id
     const responseProducts = await productService.getProductByQuotationId(id);
     responseProducts.map( async (product) => {
@@ -85,8 +121,21 @@ async function destroyQuotation(req, res) {
         // elimino el producto
         await productService.delete(product._id)
     })
-    const message = "QUOTATION DELETED 2";
+    const message = "QUOTATION DELETED";
     const response = await quotationService.delete(id);
+    if (!response) {
+        return res.status(404).json({ message: "Quotation not found" });
+    }
+    // preparo la informacion
+    const action = {
+        userId: userId,
+        action: "DELETE",
+        quotationModifiedId: id,
+        oprationSucces: true
+    };
+    // grabo el movimiento
+    await usersActionsService.create(action);
+
     return res.status(200).json({ response, message });
 }
 

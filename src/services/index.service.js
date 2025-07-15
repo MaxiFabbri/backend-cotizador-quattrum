@@ -7,6 +7,7 @@ import GeneralParameters from "../dao/GeneralParameters.dao.js";
 import quotations from "../dao/Quotations.dao.js";
 import Products from "../dao/Products.dao.js";
 import Processes from "../dao/Processes.dao.js";
+import UsersActions from "../dao/UsersActions.dao.js";
 
 import UserRepository from "../repository/UserRepository.js";
 import CustomerPaymentMethodRepository from "../repository/CustomerPaymentMethodRepository.js";
@@ -17,6 +18,7 @@ import GeneralParameterRepository from "../repository/GeneralParameterRepository
 import QuotationRepository from "../repository/QuotationRepository.js";
 import ProductRepository from "../repository/ProductRepository.js";
 import ProcessRepository from "../repository/ProcessRepository.js";
+import UsersActionsRepository from "../repository/UsersActionsRepository.js";
 
 export const usersService = new UserRepository(new Users());
 export const customerPaymentMethodService = new CustomerPaymentMethodRepository(new CustomerPaymentMethods());
@@ -27,3 +29,4 @@ export const generalParameterService = new GeneralParameterRepository(new Genera
 export const quotationService = new QuotationRepository(new quotations());
 export const productService = new ProductRepository(new Products());
 export const processService = new ProcessRepository(new Processes());
+export const usersActionsService = new UsersActionsRepository(new UsersActions());

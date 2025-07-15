@@ -45,6 +45,10 @@ const schema = new mongoose.Schema({
         type: Boolean,
         required: true,
         default: false
+    },
+    lastModifiedBy: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Users'
     }
 })
 

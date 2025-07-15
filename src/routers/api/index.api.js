@@ -10,6 +10,7 @@ import customersApiRouter from "./customers.api.js";
 import quotationsApiRouter from "./quotations.api.js";
 import productsApiRouter from "./products.api.js";
 import processesApiRouter from "./processes.api.js";
+import usersActionsApiRouter from "./usersActions.api.js";
 
 
 class ApiRouter extends CustomRouter {
@@ -28,6 +29,7 @@ class ApiRouter extends CustomRouter {
     this.use("/products", ["PUBLIC"], productsApiRouter);
     this.use("/processes", ["PUBLIC"], processesApiRouter);
     this.use("/sessions", ["PUBLIC"], sessionsApiRouter);
+    this.use("/users-actions", ["PUBLIC"], usersActionsApiRouter);
   };
 }
 
