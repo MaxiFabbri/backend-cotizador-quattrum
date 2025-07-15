@@ -16,7 +16,6 @@ const PORT = process.env.PORT || 8080;
 
 // CORS
 const corsOptions = {
-  // origin: ['http://localhost:5173', 'https://quattrum-cotizador.vercel.app'],
   origin: process.env.FRONTEND_URL,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
   preflightContinue: false,
