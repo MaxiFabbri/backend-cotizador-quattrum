@@ -9,8 +9,18 @@ const schema = new mongoose.Schema({
     },
     days_to_payment:{
         type:Number,
-        required:true
+        required:false
     },
+    supplier_payment_details:{
+        type: [{
+            id: String,
+            percentage: Number,
+            description: String,
+            days: Number,
+            downpayment: Boolean
+        }],
+        required:false
+    }
 })
 
 const supplierPaymentMethodModel = mongoose.model(collection,schema);
