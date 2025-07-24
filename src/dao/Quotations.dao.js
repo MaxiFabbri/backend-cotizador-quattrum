@@ -25,6 +25,9 @@ export default class quotations {
                     path: 'customerPaymentMethodId'
                 }
             })
+            .populate({
+                path:'paymentMethodId',
+            })
     }
 
     getQuotationsFilteredPopulated = (query) => {
@@ -39,7 +42,7 @@ export default class quotations {
         .limit(100);
         return response
     }
-
+    
     getQuotationsByIdWithCustomerDetails = (query) => {
         const response = quotationModel.find(query)
         .populate({
