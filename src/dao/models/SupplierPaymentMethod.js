@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const collection = 'SupplierPaymentMethod';
+const collection = 'SupplierPaymentMethods';
 
 const schema = new mongoose.Schema({
     supplier_payment_description:{

@@ -29,9 +29,12 @@ export default class Processes {
         return processModel.find(params)
         .populate({
                 path: 'supplierId',
-                populate: {
-                    path: 'supplierPaymentMethodId'
-                }
-            })            
+                // populate: {
+                //     path: 'supplierPaymentMethodId'
+                // }
+            })
+        .populate({
+            path: "supplierPaymentMethodId",
+        })        
     }
 }
