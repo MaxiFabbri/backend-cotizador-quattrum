@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import supplierPaymentMethodsModel from './SupplierPaymentMethod.js';
+// import supplierPaymentMethodsModel from './SupplierPaymentMethod.js';
 
 const collection = 'Suppliers';
 
@@ -27,7 +27,7 @@ const schema = new mongoose.Schema({
     },
     supplierPaymentMethodId:{
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'SupplierPaymentMethod'
+        ref: 'SupplierPaymentMethods'
     }
 })
 
