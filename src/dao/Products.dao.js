@@ -11,6 +11,12 @@ export default class Products {
         return productModel.findOne(params);
     }
 
+    getByQuotationId = (params) => {
+        console.log("Getting products by quotationId with params: ", params);
+        return productModel.find(params)
+        .sort({ order: 1 })      
+    }
+
     save = (doc) =>{
         return productModel.create(doc);
     }

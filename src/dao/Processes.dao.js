@@ -27,14 +27,12 @@ export default class Processes {
     }
     getByProductPopulated = (params) => {
         return processModel.find(params)
+        .sort({ order: 1 })
         .populate({
                 path: 'supplierId',
-                // populate: {
-                //     path: 'supplierPaymentMethodId'
-                // }
             })
         .populate({
             path: "supplierPaymentMethodId",
-        })        
+        })      
     }
 }

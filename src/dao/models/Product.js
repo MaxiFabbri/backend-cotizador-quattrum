@@ -34,6 +34,10 @@ const schema = new mongoose.Schema({
     productDescription: {
         type: String,
         required: false
+    },
+    order: {
+        type: Number,
+        required: false
     }
 })
 

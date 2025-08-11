@@ -6,7 +6,7 @@ export default class ProductRepository extends GenericRepository{
     }
     
     getProductByQuotationId = (quotationId) =>{
-        return this.getAll({quotationId});
+        return this.dao.getByQuotationId({quotationId});
     }
     getProductById = (id) =>{
         return this.getBy({_id:id})

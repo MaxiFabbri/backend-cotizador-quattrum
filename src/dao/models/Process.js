@@ -44,6 +44,10 @@ const schema = new mongoose.Schema({
     subTotalProcessCost: {
         type: Number,
         required: true
+    },
+    order: {
+        type: Number,
+        required: false
     }
 })
 
