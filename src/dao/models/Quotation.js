@@ -49,6 +49,11 @@ const schema = new mongoose.Schema({
     lastModifiedBy: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Users'
+    },
+    calculateFinancing: {
+        type: Boolean,
+        required: false,
+        default: false
     }
 })
 
