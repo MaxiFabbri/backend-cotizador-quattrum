@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-// import customerPaymentMethodsModel from './CustomerPaymentMethod.js';   
+import mongoosePaginate from 'mongoose-paginate-v2'; 
 
 const collection = 'Customers';
 
@@ -31,6 +31,7 @@ const schema = new mongoose.Schema({
     }
 })
 
+schema.plugin(mongoosePaginate)
 const customerModel = mongoose.model(collection,schema);
 
 export default customerModel;

@@ -19,6 +19,20 @@ async function readCustomerPopulated(req, res) {
     const response = await customerService.getSomeCustomersPopulated(name);
     return res.status(200).json({ response, message });
 }
+async function readCustomerPopulatedPaginated(req, res) {
+    const { filter, page, limit } = req.query;
+    console.log("Customers Controlers req: ",req.query);
+    
+    const options = {
+        page: parseInt(page) || 1,
+        limit: parseInt(limit) || 10,
+        sort: { name: 1 }
+    };
+    const message = "CUSTOMERS POPULATED PAGINATED FOUND";
+    const response = await customerService.getCustomersPopulatedPaginated({filter},options);
+    return res.status(200).json({ response, message });
+}
+
 async function readCustomerById(req, res) {
     const { id } = req.params;
     const message = "CUSTOMER FOUND";
@@ -62,6 +76,7 @@ export {
     readCustomerById,
     readCustomerByName,
     readCustomerByNameOrCode,
+    readCustomerPopulatedPaginated,
     updateCustomer, 
     destroyCustomer 
 }

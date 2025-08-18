@@ -6,6 +6,7 @@ import {
     readCustomerById,
     readCustomerByName,
     readCustomerByNameOrCode,
+    readCustomerPopulatedPaginated,
     updateCustomer, 
     destroyCustomer 
 } from "../../controllers/customers.controllers.js";
@@ -22,6 +23,7 @@ class CustomersApiRouter extends CustomRouter {
         this.read("/", ["USER", "ADMIN"], readCustomer);
         this.read("/name/:name", ["USER", "ADMIN"], readCustomerByName);
         this.read("/populated/name", ["USER", "ADMIN"], readCustomerPopulated);
+        this.read("/paginated", ["USER", "ADMIN"], readCustomerPopulatedPaginated);
         this.read("/:id", ["USER", "ADMIN"], readCustomerById);
         this.update("/:id", ["USER", "ADMIN"], updateCustomer);
         this.destroy("/:id", ["USER", "ADMIN"], destroyCustomer);      
