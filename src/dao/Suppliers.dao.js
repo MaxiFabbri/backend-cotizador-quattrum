@@ -20,6 +20,23 @@ export default class Suppliers {
             .limit(50); 
     }
 
+    getSuppliersPopulatedPaginated = (params, options) => {
+        const filters = {
+            $or: [
+                { name: { $regex: params.filter, $options: 'i' } },
+                { code: { $regex: params.filter, $options: 'i' } }
+            ]
+        };
+        const finalOptions = {
+            ...options,
+            populate: {
+                path: 'supplierPaymentMethodId',
+                select: 'supplier_payment_description'
+            }
+        };
+        return supplier.paginate(filters, finalOptions);
+    }
+
     getOneSupplierWithPayemntMethod = (params) => {
         return supplier.findOne(params)
             .populate({

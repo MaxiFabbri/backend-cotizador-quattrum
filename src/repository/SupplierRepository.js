@@ -16,6 +16,10 @@ export default class SupplierRepository extends GenericRepository{
         return this.dao.getOneSupplierWithPayemntMethod({_id:id})
     }
 
+    getSuppliersPopulatedPaginated = (params,options) =>{
+        return this.dao.getSuppliersPopulatedPaginated(params,options)
+    }
+
     getSupplierByName = (name) =>{  
         return this.getAll({
             $or: [

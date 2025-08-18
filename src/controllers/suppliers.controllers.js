@@ -38,6 +38,21 @@ async function destroySupplier(req, res) {
     const response = await supplierService.delete(id);
     return res.status(200).json({ response, message });
 }
+
+async function readSupplierPopulatedPaginated(req, res) {
+    const { filter, page, limit } = req.query;
+    console.log("Suppliers Controlers req: ",req.query);
+    
+    const options = {
+        page: parseInt(page) || 1,
+        limit: parseInt(limit) || 10,
+        sort: { name: 1 }
+    };
+    const message = "CUSTOMERS POPULATED PAGINATED FOUND";
+    const response = await supplierService.getSuppliersPopulatedPaginated({filter},options);
+    return res.status(200).json({ response, message });
+}
+
 async function readSupplierPopulated(req, res) {
     const { name } = req.query;
     const message = "SUPPLIER POPULATED FOUND";
@@ -59,6 +74,7 @@ export {
     readSupplierByName,
     readSupplierByNameOrCode,
     readSupplierPopulated,
+    readSupplierPopulatedPaginated,
     updateSupplier,
     destroySupplier
 }

@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-// import supplierPaymentMethodsModel from './SupplierPaymentMethod.js';
+import mongoosePaginate from 'mongoose-paginate-v2';
 
 const collection = 'Suppliers';
 
@@ -31,6 +31,7 @@ const schema = new mongoose.Schema({
     }
 })
 
+schema.plugin(mongoosePaginate);
 const supplierModel = mongoose.model(collection,schema);
 
 export default supplierModel;
