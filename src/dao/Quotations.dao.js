@@ -1,3 +1,4 @@
+// import { name } from 'faker/lib/locales/az/index.js';
 import quotationModel from './models/Quotation.js';
 
 
@@ -41,6 +42,22 @@ export default class quotations {
         .sort({ date: -1 }) 
         .limit(100);
         return response
+    }
+
+    getQuotationsFilteredPaginated = (params, options) => {
+        const finalOptions = {
+            ...options,
+            sort: { date: -1 },
+            populate: {
+                path: 'customerId',
+                populate: {
+                    path: 'customerPaymentMethodId',
+                    select: 'customer_payment_description'
+                }
+            }
+        };
+    
+        return quotationModel.paginate(params, finalOptions);
     }
     
     getQuotationsByIdWithCustomerDetails = (query) => {

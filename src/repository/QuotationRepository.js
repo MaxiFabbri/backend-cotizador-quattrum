@@ -22,5 +22,8 @@ export default class QuotationRepository extends GenericRepository{
     getQuotationsFilteredPopulated(customerIds, quoteStatus){
         return this.dao.getQuotationsFilteredPopulated( { customerId: { $in: customerIds }, quoteStatus } )        
     }
+    getQuotationsFilteredPaginated = (customerIds, quoteStatus, options) => {
+        return this.dao.getQuotationsFilteredPaginated({ customerId: { $in: customerIds }, quoteStatus }, options);
+    }
     
 }

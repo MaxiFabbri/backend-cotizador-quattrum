@@ -7,6 +7,7 @@ import {
     readQuotationByIdPopulated,
     readQuotationPopulatedByCustomerName,
     readQuotationById,
+    readQuotationsPopulatedPaginated,
     updateQuotation, 
     destroyQuotation 
 } from "../../controllers/quotations.controllers.js";
@@ -20,10 +21,10 @@ class QuotationsApiRouter extends CustomRouter {
     init = () => {
         this.create("/", ["USER", "ADMIN"], createQuotation);
         this.read("/", ["USER", "ADMIN"], readQuotation);
-        // this.read("/name", ["USER", "ADMIN"], readQuotationPopulatedByCustomerName);
         this.read("/filtered", ["USER", "ADMIN"], readQuotationPopulatedFiltered);
         this.read("/populated/", ["USER", "ADMIN"], readQuotationPopulated);
-        this.read("/populated/:id", ["USER", "ADMIN"], readQuotationByIdPopulated)
+        this.read("/populated/:id", ["USER", "ADMIN"], readQuotationByIdPopulated);
+        this.read("/paginated", ["USER", "ADMIN"], readQuotationsPopulatedPaginated);
         this.read("/:id", ["USER", "ADMIN"], readQuotationById);
         this.update("/:id", ["USER", "ADMIN"], updateQuotation);
         this.destroy("/:id", ["USER", "ADMIN"], destroyQuotation);      

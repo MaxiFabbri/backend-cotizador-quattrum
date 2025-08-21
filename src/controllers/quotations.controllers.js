@@ -55,7 +55,6 @@ async function readQuotationPopulatedByCustomerName(req, res) {
 async function readQuotationPopulatedFiltered(req, res) {
     const name = req.query.name;
     const quoteStatus = req.query.status || {$in: ['Cotizado', 'Aprobado', 'En Producción', 'Entregado']};
-    console.log("Filtered Route Data: ", name, quoteStatus)
     try {
         // Busco el customer por name recibido en la consulta
         const customers = await customerService.getCustomerByNameOrCode(name);
@@ -69,6 +68,35 @@ async function readQuotationPopulatedFiltered(req, res) {
         console.error('Error al obtener cotizaciones:', error);
         return [];
     }
+}
+
+async function readQuotationsPopulatedPaginated(req, res) {
+    const { name, page, limit } = req.query;
+    const quoteStatus = req.query.status || {$in: ['Cotizado', 'Aprobado', 'En Producción', 'Entregado']};
+    
+    const options = {
+        page: parseInt(page) || 1,
+        limit: parseInt(limit) || 25,
+        sort: { name: 1 }
+    };
+    const message = "CUSTOMERS POPULATED PAGINATED FOUND";
+    // const response = await customerService.getCustomersPopulatedPaginated({filter},options);
+
+    try {
+        // Busco el customer por name recibido en la consulta
+        const customers = await customerService.getCustomerByNameOrCode(name);
+        // Recivo los customers que coinciden con el name
+        const customerIds = customers.map(customer => customer._id);
+        // Busco las cotizaciones por customerIds y quoteStatus
+        const response = await quotationService.getQuotationsFilteredPaginated(customerIds, quoteStatus, options);
+        const message = "QUOTATIONS FOUND";
+        return res.status(200).json({ response, message });
+    } catch (error) {
+        console.error('Error al obtener cotizaciones:', error);
+        return [];
+    }
+
+    return res.status(200).json({ response, message });
 }
 
 async function readQuotationPopulated(req, res) {
@@ -148,6 +176,7 @@ export {
     readQuotationByIdPopulated,
     readQuotationPopulatedByCustomerName,
     readQuotationById,
+    readQuotationsPopulatedPaginated,
     updateQuotation, 
     destroyQuotation 
 }

@@ -25,7 +25,7 @@ async function readCustomerPopulatedPaginated(req, res) {
     
     const options = {
         page: parseInt(page) || 1,
-        limit: parseInt(limit) || 10,
+        limit: parseInt(limit) || 25,
         sort: { name: 1 }
     };
     const message = "CUSTOMERS POPULATED PAGINATED FOUND";
