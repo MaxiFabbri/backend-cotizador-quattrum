@@ -35,6 +35,10 @@ const schema = new mongoose.Schema({
         type: String,
         required: false
     },
+    totalProductCost: {
+        type: Number,
+        required: false
+    },
     order: {
         type: Number,
         required: false
