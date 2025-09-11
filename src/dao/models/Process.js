@@ -19,6 +19,16 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'SupplierPaymentMethods'
     },
+    supplierPaymentDetails: {
+        type: [{
+            id: String,
+            percentage: Number,
+            description: String,
+            days: Number,
+            downpayment: Boolean
+        }],
+        required:false
+    },
     daysToPayment: {
         type: Number,
         required: false

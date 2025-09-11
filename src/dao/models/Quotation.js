@@ -16,6 +16,16 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'CustomerPaymentMethod'
     },
+    customerPaymentDetails: {
+        type: [{
+            id: String,
+            percentage: Number,
+            description: String,
+            days: Number,
+            downpayment: Boolean
+        }],
+        required:false
+    },
     monthlyRate: {
         type: Number,
         required: false
