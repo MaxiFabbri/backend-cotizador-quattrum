@@ -102,7 +102,6 @@ async function readQuotationsPopulatedPaginated(req, res) {
 async function readQuotationPopulatedPaginatedNew(req, res) {
     const { name, page, limit } = req.query;
     const quoteStatus = req.query.status || {$in: ['Cotizado', 'Aprobado', 'En Producción', 'Entregado']};
-    console.log('name:', name);
     const options = {
         page: parseInt(page) || 1,
         limit: parseInt(limit) || 50,
@@ -111,12 +110,7 @@ async function readQuotationPopulatedPaginatedNew(req, res) {
     const message = "CUSTOMERS POPULATED PAGINATED FOUND";
 
     try {
-        // Busco el customer por name recibido en la consulta
-        // const customers = await customerService.getCustomerByNameOrCode(name);
-        // Recivo los customers que coinciden con el name
-        // const customerIds = customers.map(customer => customer._id);
         // Busco las cotizaciones por customerIds y quoteStatus
-        console.log('quoteStatus: ', quoteStatus, "Name: ", name);
         const response = await quotationService.getQuotationsPopulatedFilteredPaginated(name, quoteStatus, options);
         const message = "QUOTATIONS FOUND";
         return res.status(200).json({ response, message });

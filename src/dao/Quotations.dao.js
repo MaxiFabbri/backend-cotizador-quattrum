@@ -61,7 +61,6 @@ export default class quotations {
     }
 
     getQuotationsPopulatedFilteredPaginated = async (params, options) => {
-        console.log("Options: ", options)
         const { page, limit, sort } = options;
         const pipeline = [];
 
@@ -119,11 +118,9 @@ export default class quotations {
         // Paginación
         pipeline.push({ $skip: (page - 1) * limit });
         pipeline.push({ $limit: limit });
-        console.log("Pipeline: ", pipeline);
 
         // Ejecutar agregación
         const quotations = await quotationModel.aggregate(pipeline);
-        console.log("Quotations: ", quotations);
 
         // Obtener total para paginación
         const countPipeline = [...pipeline.filter(stage => !stage.$skip && !stage.$limit)];
