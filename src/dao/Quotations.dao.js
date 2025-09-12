@@ -19,7 +19,7 @@ export default class quotations {
     }
 
     getOneQuotationByIdwithCustomerDetails = (id) => {
-        return quotationModel.findOne({_id:id})
+        return quotationModel.findOne({ _id: id })
             .populate({
                 path: 'customerId',
                 populate: {
@@ -27,20 +27,20 @@ export default class quotations {
                 }
             })
             .populate({
-                path:'paymentMethodId',
+                path: 'paymentMethodId',
             })
     }
 
     getQuotationsFilteredPopulated = (query) => {
         const response = quotationModel.find(query)
-        .populate({
-            path: 'customerId',
-            populate: {
-                path: 'customerPaymentMethodId'
-            }
-        })
-        .sort({ date: -1 }) 
-        .limit(100);
+            .populate({
+                path: 'customerId',
+                populate: {
+                    path: 'customerPaymentMethodId'
+                }
+            })
+            .sort({ date: -1 })
+            .limit(100);
         return response
     }
 
@@ -56,20 +56,102 @@ export default class quotations {
                 }
             }
         };
-    
+
         return quotationModel.paginate(params, finalOptions);
     }
-    
+
+    getQuotationsPopulatedFilteredPaginated = async (params, options) => {
+        console.log("Options: ", options)
+        const { page, limit, sort } = options;
+        const pipeline = [];
+
+        // Lookup de cliente
+        pipeline.push({
+            $lookup: {
+                from: 'customers',
+                localField: 'customerId',
+                foreignField: '_id',
+                as: 'customer'
+            }
+        });
+        pipeline.push({
+            $unwind: {
+                path: '$customer',
+                preserveNullAndEmptyArrays: true
+            }
+        });    
+
+        // Lookup de productos
+        pipeline.push({
+            $lookup: {
+                from: 'products',
+                localField: '_id',
+                foreignField: 'quotationId',
+                as: 'products'
+            }
+        });
+
+        // Filtro por nombre parcial (name) y estado (quoteStatus)
+        const matchConditions = [];
+
+        if (params.name) {
+            const regex = new RegExp(params.name, 'i');
+            matchConditions.push({
+                $or: [
+                    { 'customer.name': { $regex: regex } },
+                    { 'customer.code': { $regex: regex } },
+                    { products: { $elemMatch: { productDescription: { $regex: regex } } } }
+                ]
+            });
+        }
+
+        if (params.quoteStatus) {
+            matchConditions.push({ quoteStatus: params.quoteStatus });
+        }
+
+        if (matchConditions.length > 0) {
+            pipeline.push({ $match: { $and: matchConditions } });
+        }
+
+        // Ordenar
+        pipeline.push({ $sort: sort });
+
+        // Paginación
+        pipeline.push({ $skip: (page - 1) * limit });
+        pipeline.push({ $limit: limit });
+        console.log("Pipeline: ", pipeline);
+
+        // Ejecutar agregación
+        const quotations = await quotationModel.aggregate(pipeline);
+        console.log("Quotations: ", quotations);
+
+        // Obtener total para paginación
+        const countPipeline = [...pipeline.filter(stage => !stage.$skip && !stage.$limit)];
+        countPipeline.push({ $count: 'total' });
+        const totalResult = await quotationModel.aggregate(countPipeline);
+        const totalDocs = totalResult[0]?.total || 0;
+
+        return {
+            docs: quotations,
+            totalDocs,
+            page,
+            limit,
+            hasNextPage: page * limit < totalDocs,
+            hasPrevPage: page > 1,
+            totalPages: Math.ceil(totalDocs / limit)
+        };
+    };
+
     getQuotationsByIdWithCustomerDetails = (query) => {
         const response = quotationModel.find(query)
-        .populate({
-            path: 'customerId',
-            populate: {
-                path: 'customerPaymentMethodId'
-            }
-        })
-        .sort({ date: -1 }) 
-        .limit(100);
+            .populate({
+                path: 'customerId',
+                populate: {
+                    path: 'customerPaymentMethodId'
+                }
+            })
+            .sort({ date: -1 })
+            .limit(100);
         return response
     }
 

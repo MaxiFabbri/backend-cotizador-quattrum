@@ -8,6 +8,7 @@ import {
     readQuotationPopulatedByCustomerName,
     readQuotationById,
     readQuotationsPopulatedPaginated,
+    readQuotationPopulatedPaginatedNew,
     updateQuotation, 
     destroyQuotation 
 } from "../../controllers/quotations.controllers.js";
@@ -25,6 +26,7 @@ class QuotationsApiRouter extends CustomRouter {
         this.read("/populated/", ["USER", "ADMIN"], readQuotationPopulated);
         this.read("/populated/:id", ["USER", "ADMIN"], readQuotationByIdPopulated);
         this.read("/paginated", ["USER", "ADMIN"], readQuotationsPopulatedPaginated);
+        this.read("/paginated-new/", ["USER", "ADMIN"], readQuotationPopulatedPaginatedNew);
         this.read("/:id", ["USER", "ADMIN"], readQuotationById);
         this.update("/:id", ["USER", "ADMIN"], updateQuotation);
         this.destroy("/:id", ["USER", "ADMIN"], destroyQuotation);      
