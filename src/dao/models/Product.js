@@ -31,6 +31,15 @@ const schema = new mongoose.Schema({
         type: Number,
         required: false
     },
+    calculatedSellingPrice: {
+        type: Number,
+        required: false
+    },
+    isManual: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     productDescription: {
         type: String,
         required: false
