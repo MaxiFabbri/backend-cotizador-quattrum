@@ -39,9 +39,17 @@ const schema = new mongoose.Schema({
         enum: ['Dolar', 'Peso'],
         default: 'Peso',
     },
+    enteredUnitCost: {
+        type: Number,
+        required: false
+    },
     unitCost: {
         type: Number,
         required: true
+    },
+    enteredFixedCost: {
+        type: Number,
+        required: false
     },
     fixedCost: {
         type: Number,
