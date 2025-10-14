@@ -23,7 +23,15 @@ const schema = new mongoose.Schema({
         type: Number,
         required: false
     },
+    enteredShipmentCost: {
+        type: Number,
+        required: false
+    },
     otherCost: {
+        type: Number,
+        required: false
+    },
+    enteredOtherCost: {
         type: Number,
         required: false
     },
