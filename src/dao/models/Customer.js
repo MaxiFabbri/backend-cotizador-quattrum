@@ -28,6 +28,26 @@ const schema = new mongoose.Schema({
     customerPaymentMethodId:{
         type: mongoose.Schema.Types.ObjectId,
         ref: 'CustomerPaymentMethod'
+    },
+    customerNote:{
+        type:String,
+        required:false,
+        trim:true
+    },
+    customerContact:{
+        type: [{
+            id: String,
+            name: String,
+            position: String,
+            email: String,
+            phone: String
+        }],
+        required:false
+    },
+    deliveryAddress:{
+        type: String,
+        required:false,
+        trim:true
     }
 })
 
