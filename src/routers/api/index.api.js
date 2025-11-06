@@ -11,6 +11,9 @@ import quotationsApiRouter from "./quotations.api.js";
 import productsApiRouter from "./products.api.js";
 import processesApiRouter from "./processes.api.js";
 import usersActionsApiRouter from "./usersActions.api.js";
+import jobsApiRouter from "./jobs.api.js";
+import jobProductsApiRouter from "./jobProducts.api.js";
+import jobProcessesApiRouter from "./jobProcesses.api.js";
 
 
 class ApiRouter extends CustomRouter {
@@ -30,6 +33,9 @@ class ApiRouter extends CustomRouter {
     this.use("/processes", ["PUBLIC"], processesApiRouter);
     this.use("/sessions", ["PUBLIC"], sessionsApiRouter);
     this.use("/users-actions", ["PUBLIC"], usersActionsApiRouter);
+    this.use("/jobs", ["PUBLIC"], jobsApiRouter);
+    this.use("/job-products", ["PUBLIC"], jobProductsApiRouter);
+    this.use("/job-processes", ["PUBLIC"], jobProcessesApiRouter);
   };
 }
 

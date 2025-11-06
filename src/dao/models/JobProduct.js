@@ -1,11 +1,11 @@
 import mongoose from 'mongoose';
 
-const collection = 'Products';
+const collection = 'JobProducts';
 
 const schema = new mongoose.Schema({
-    quotationId: {
+    jobId: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Quotations'
+        ref: 'Jobs'
     },
     quantity: {
         type: Number,
@@ -23,15 +23,7 @@ const schema = new mongoose.Schema({
         type: Number,
         required: false
     },
-    enteredShipmentCost: {
-        type: Number,
-        required: false
-    },
     otherCost: {
-        type: Number,
-        required: false
-    },
-    enteredOtherCost: {
         type: Number,
         required: false
     },
@@ -48,7 +40,7 @@ const schema = new mongoose.Schema({
         required: true,
         default: false
     },
-    jobProductDescription: {
+    productDescription: {
         type: String,
         required: false
     },
@@ -59,9 +51,13 @@ const schema = new mongoose.Schema({
     order: {
         type: Number,
         required: false
+    },
+    jobProductNote: {
+        type: String,
+        required: false
     }
 })
 
-const productModel = mongoose.model(collection, schema);
+const jobProductModel = mongoose.model(collection, schema);
 
-export default productModel;
+export default jobProductModel;

@@ -8,6 +8,9 @@ import quotations from "../dao/Quotations.dao.js";
 import Products from "../dao/Products.dao.js";
 import Processes from "../dao/Processes.dao.js";
 import UsersActions from "../dao/UsersActions.dao.js";
+import Jobs from "../dao/Jobs.dao.js";
+import JobProducts from "../dao/JobProducts.dao.js";
+import JobProcesses from "../dao/JobProcesses.dao.js";
 
 import UserRepository from "../repository/UserRepository.js";
 import CustomerPaymentMethodRepository from "../repository/CustomerPaymentMethodRepository.js";
@@ -19,6 +22,9 @@ import QuotationRepository from "../repository/QuotationRepository.js";
 import ProductRepository from "../repository/ProductRepository.js";
 import ProcessRepository from "../repository/ProcessRepository.js";
 import UsersActionsRepository from "../repository/UsersActionsRepository.js";
+import JobRepository from "../repository/JobRepository.js";
+import JobProductRepository from "../repository/JobProductRepository.js";
+import JobProcessRepository from "../repository/JobProcessRepository.js";
 
 export const usersService = new UserRepository(new Users());
 export const customerPaymentMethodService = new CustomerPaymentMethodRepository(new CustomerPaymentMethods());
@@ -30,3 +36,6 @@ export const quotationService = new QuotationRepository(new quotations());
 export const productService = new ProductRepository(new Products());
 export const processService = new ProcessRepository(new Processes());
 export const usersActionsService = new UsersActionsRepository(new UsersActions());
+export const jobService = new JobRepository(new Jobs());
+export const jobProductService = new JobProductRepository(new JobProducts());
+export const jobProcessService = new JobProcessRepository(new JobProcesses());
