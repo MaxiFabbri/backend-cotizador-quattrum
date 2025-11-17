@@ -11,6 +11,19 @@ export default class jobs {
         return jobsModel.findOne(params);
     }
 
+    getOneJobByIdwithCustomerDetails = (id) => {
+        return jobsModel.findOne({ _id: id })
+            .populate({
+                path: 'customerId',
+                populate: {
+                    path: 'customerPaymentMethodId'
+                }
+            })
+            .populate({
+                path: 'paymentMethodId',
+            })
+    }
+
     save = (doc) => {
         return jobsModel.create(doc);
     }

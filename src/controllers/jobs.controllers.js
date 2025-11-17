@@ -23,6 +23,13 @@ async function readJobById(req, res) {
     const response = await jobService.getJobById(id);
     return res.status(200).json({ response, message });
 }
+async function readJobByIdPopulated(req, res) {
+    const { id } = req.params;
+    const message = "QUOTATIONS FOUND";
+    const response = await jobService.getJobByIdPopulated(id);
+    return res.status(200).json({ response, message });
+}
+
 async function updateJob(req, res) {
     const userId = req.user._id; // Obtengo el userId del token
     const { id } = req.params;
@@ -52,6 +59,7 @@ export {
     createJob, 
     readJob,
     readJobById,
+    readJobByIdPopulated,
     updateJob, 
     destroyJobById
 }

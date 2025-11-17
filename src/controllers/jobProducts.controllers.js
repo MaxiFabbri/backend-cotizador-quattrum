@@ -23,6 +23,12 @@ async function readJobProductById(req, res) {
     const response = await jobProductService.getJobById(id);
     return res.status(200).json({ response, message });
 }
+async function readJobProductByJobId(req, res) {
+    const { jobId } = req.params;
+    const message = "PRODUCT FOUND";
+    const response = await jobProductService.getJobProductByJobId(jobId);
+    return res.status(200).json({ response, message });
+}
 async function updateJobProduct(req, res) {
     const userId = req.user._id; // Obtengo el userId del token
     const { id } = req.params;
@@ -52,6 +58,7 @@ export {
     createJobProduct, 
     readJobProduct,
     readJobProductById,
+    readJobProductByJobId,
     updateJobProduct, 
     destroyJobProductById
 }

@@ -39,9 +39,17 @@ const schema = new mongoose.Schema({
         type: Number,
         required: true
     },
+    enteredUnitCost: {
+        type: Number,
+        required: false
+    },
     fixedCost: {
         type: Number,
         required: true
+    },
+    enteredFixedCost: {
+        type: Number,
+        required: false
     },
     adjustPercentage: {
         type: Number,
@@ -58,6 +66,12 @@ const schema = new mongoose.Schema({
     jobProcessNote: {
         type: String,
         required: false
+    },
+    jobProcessStatus: {
+        type: String,
+        required: true,
+        // enum: ['Pendiente', 'En Proceso', 'Terminado', 'Entregado'], // Opciones permitidas
+        default: 'Pendiente',
     }
 })
 

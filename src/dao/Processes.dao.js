@@ -2,24 +2,24 @@ import processModel from './models/Process.js';
 
 
 export default class Processes {
-    
-    get = (params) =>{
+
+    get = (params) => {
         return processModel.find(params);
     }
 
-    getBy = (params) =>{
+    getBy = (params) => {
         return processModel.findOne(params);
     }
 
-    save = (doc) =>{
+    save = (doc) => {
         return processModel.create(doc);
     }
 
-    update = (id,doc) =>{
-        return processModel.findByIdAndUpdate(id,{$set:doc})
+    update = (id, doc) => {
+        return processModel.findByIdAndUpdate(id, { $set: doc })
     }
 
-    delete = (id) =>{
+    delete = (id) => {
         return processModel.findByIdAndDelete(id);
     }
     deleteMany = (params) => {
@@ -27,12 +27,12 @@ export default class Processes {
     }
     getByProductPopulated = (params) => {
         return processModel.find(params)
-        .sort({ order: 1 })
-        .populate({
+            .sort({ order: 1 })
+            .populate({
                 path: 'supplierId',
             })
-        .populate({
-            path: "supplierPaymentMethodId",
-        })      
+            .populate({
+                path: "supplierPaymentMethodId",
+            })
     }
 }

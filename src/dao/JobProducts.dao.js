@@ -9,6 +9,10 @@ export default class jobProducts {
     getBy = (params) => {
         return jobProductModel.findOne(params);
     }
+    getByJobId = (params) => {
+        return jobProductModel.find(params)
+        .sort({ order: 1 })      
+    }
 
     save = (doc) => {
         return jobProductModel.create(doc);

@@ -23,7 +23,15 @@ const schema = new mongoose.Schema({
         type: Number,
         required: false
     },
+    enteredShipmentCost: {
+        type: Number,
+        required: false
+    },
     otherCost: {
+        type: Number,
+        required: false
+    },
+    enteredOtherCost: {
         type: Number,
         required: false
     },
@@ -40,7 +48,7 @@ const schema = new mongoose.Schema({
         required: true,
         default: false
     },
-    productDescription: {
+    jobProductDescription: {
         type: String,
         required: false
     },
@@ -55,6 +63,12 @@ const schema = new mongoose.Schema({
     jobProductNote: {
         type: String,
         required: false
+    },
+    jobProductStatus: {
+        type: String,
+        required: true,
+        // enum: ['Pendiente', 'En Proceso', 'Terminado', 'Entregado'], // Opciones permitidas
+        default: 'Pendiente',
     }
 })
 

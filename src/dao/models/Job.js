@@ -35,6 +35,10 @@ const schema = new mongoose.Schema({
         }],
         required:false
     },
+    monthlyRate: {
+        type: Number,
+        required: false
+    },
     currency: {
         type: String,
         required: true,
@@ -60,6 +64,11 @@ const schema = new mongoose.Schema({
         type: String,
         required: false,
     },
+    calculateFinancing: {
+        type: Boolean,
+        required: false,
+        default: false
+    }
 })
 
 schema.plugin(mongoosePaginate)

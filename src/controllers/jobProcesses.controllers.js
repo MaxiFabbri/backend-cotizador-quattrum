@@ -20,7 +20,14 @@ async function readJobProcess(req, res) {
 async function readJobProcessById(req, res) {
     const { id } = req.params;
     const message = "JOB PROCESS FOUND";
-    const response = await jobProcessService.getJobById(id);
+    const response = await jobProcessService.getJobProcessById(id);
+    return res.status(200).json({ response, message });
+}
+async function readJobProcessByJobProductId(req, res) {
+    const { jobProductId } = req.params;
+    console.log("jobProductId:", jobProductId);
+    const message = "PRODUCT FOUND";
+    const response = await jobProcessService.getJobProcessByJobProductId(jobProductId);
     return res.status(200).json({ response, message });
 }
 async function updateJobProcess(req, res) {
@@ -51,6 +58,7 @@ export {
     createJobProcess, 
     readJobProcess,
     readJobProcessById,
+    readJobProcessByJobProductId,
     updateJobProcess, 
     destroyJobProcessById
 }

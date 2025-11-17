@@ -3,6 +3,7 @@ import {
     createJobProduct, 
     readJobProduct,
     readJobProductById,
+    readJobProductByJobId,
     updateJobProduct, 
     destroyJobProductById
 } from "../../controllers/jobProducts.controllers.js";
@@ -16,6 +17,7 @@ class JobsProductsApiRouter extends CustomRouter {
         this.create("/", ["USER", "ADMIN"], createJobProduct);
         this.read("/:id", ["USER", "ADMIN"], readJobProductById);
         this.read("/", ["USER", "ADMIN"], readJobProduct);
+        this.read("/job/:jobId", ["USER", "ADMIN"], readJobProductByJobId);
         this.update("/:id", ["USER", "ADMIN"], updateJobProduct);
         this.destroy("/:id", ["USER", "ADMIN"], destroyJobProductById);
     };

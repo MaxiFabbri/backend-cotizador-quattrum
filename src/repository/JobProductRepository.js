@@ -7,6 +7,9 @@ export default class JobProductRepository extends GenericRepository{
     getJobProductById = (id) =>{
         return this.getBy({_id:id})
     }
+    getJobProductByJobId = (jobId) =>{
+        return this.dao.getByJobId({jobId});
+    }
     deleteJobProductById = (id) =>{
         return this.delete(id)
     }
