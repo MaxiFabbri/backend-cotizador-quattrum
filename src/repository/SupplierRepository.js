@@ -12,7 +12,6 @@ export default class SupplierRepository extends GenericRepository{
         return this.getBy({_id:id})
     }
     getSupplierByIdPopulated = (id) =>{
-        console.log("getSupplierByIdPopulated ",id)
         return this.dao.getOneSupplierWithPayemntMethod({_id:id})
     }
 

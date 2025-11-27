@@ -25,7 +25,6 @@ async function readJobProcessById(req, res) {
 }
 async function readJobProcessByJobProductId(req, res) {
     const { jobProductId } = req.params;
-    console.log("jobProductId:", jobProductId);
     const message = "PRODUCT FOUND";
     const response = await jobProcessService.getJobProcessByJobProductId(jobProductId);
     return res.status(200).json({ response, message });

@@ -12,7 +12,6 @@ export default class Products {
     }
 
     getByQuotationId = (params) => {
-        console.log("Getting products by quotationId with params: ", params);
         return productModel.find(params)
         .sort({ order: 1 })      
     }

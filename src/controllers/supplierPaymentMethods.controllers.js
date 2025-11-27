@@ -20,7 +20,6 @@ async function readSupplierPaymentMethodById(req, res) {
 }
 async function readSupplierPaymentMethodByName(req, res) {
     const { name } = req.body;
-    console.log("Controller Supplier Name: ", name)
     const message = "SUPPLIER PAYMENT METHODS FOUND";
     const response = await supplierPaymentMethodService.getSupplierPaymentMethodByName(name);
     return res.status(200).json({ response, message });

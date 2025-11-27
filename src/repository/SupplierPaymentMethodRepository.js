@@ -11,7 +11,6 @@ export default class SupplierPaymentMethodRepository extends GenericRepository{
         return this.getBy({_id:id});
     }
     getSupplierPaymentMethodByName = (name) => {
-        console.log("Repository Supplier Name: ", name)
         return this.getAll({
             supplier_payment_description: { $regex: name, $options: "i" }
         })

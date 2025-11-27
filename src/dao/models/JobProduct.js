@@ -43,6 +43,10 @@ const schema = new mongoose.Schema({
         type: Number,
         required: false
     },
+    approvedSellingPrice: {
+        type: Number,
+        required: false
+    },
     isManual: {
         type: Boolean,
         required: true,

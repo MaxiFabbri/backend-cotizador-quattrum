@@ -72,6 +72,11 @@ const schema = new mongoose.Schema({
         required: true,
         // enum: ['Pendiente', 'En Proceso', 'Terminado', 'Entregado'], // Opciones permitidas
         default: 'Pendiente',
+    },
+    savedToDB: {
+        type: Boolean,
+        required: true,
+        default: true,
     }
 })
 

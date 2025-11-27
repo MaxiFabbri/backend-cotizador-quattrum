@@ -41,7 +41,6 @@ async function destroySupplier(req, res) {
 
 async function readSupplierPopulatedPaginated(req, res) {
     const { filter, page, limit } = req.query;
-    console.log("Suppliers Controlers req: ",req.query);
     
     const options = {
         page: parseInt(page) || 1,

@@ -9,6 +9,11 @@ const schema = new mongoose.Schema({
         ref: 'Quotations',
         required: false
     },
+    calculateFinancing: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
     approvalDate: {
         type: Date,
         required: true
@@ -48,6 +53,10 @@ const schema = new mongoose.Schema({
     exchangeRate: {
         type: Number,
         required: true
+    },
+    approvedExchangeRate: {
+        type: Number,
+        required: false
     },
     jobStatus: {
         type: String,
