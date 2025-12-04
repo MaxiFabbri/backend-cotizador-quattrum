@@ -23,6 +23,87 @@ export default class jobs {
                 path: 'paymentMethodId',
             })
     }
+    
+    getJobsPopulatedFilteredPaginated = async (params, options) => {
+        const { page, limit, sort } = options;
+        const pipeline = [];
+        console.log('Params in DAO:', params, " - ", options);
+
+        // Lookup de cliente
+        pipeline.push({
+            $lookup: {
+                from: 'customers',
+                localField: 'customerId',
+                foreignField: '_id',
+                as: 'customer'
+            }
+        });
+        pipeline.push({
+            $unwind: {
+                path: '$customer',
+                preserveNullAndEmptyArrays: true
+            }
+        });    
+
+        // Lookup de productos
+        pipeline.push({
+            $lookup: {
+                from: 'jobproducts',
+                localField: '_id',
+                foreignField: 'jobId',
+                as: 'jobProducts'
+            }
+        });
+
+        // Filtro por nombre parcial (name) y estado (quoteStatus)
+        const matchConditions = [];
+
+        if (params.name) {
+            const regex = new RegExp(params.name, 'i');
+            matchConditions.push({
+                $or: [
+                    { 'customer.name': { $regex: regex } },
+                    { 'customer.code': { $regex: regex } },
+                    { jobProducts: { $elemMatch: { jobProductDescription: { $regex: regex } } } }
+                ]
+            });
+        }
+
+        if (params.jobStatus) {
+            matchConditions.push({ jobStatus: params.jobStatus });
+        }
+
+        if (matchConditions.length > 0) {
+            pipeline.push({ $match: { $and: matchConditions } });
+        }
+
+        // Ordenar
+        pipeline.push({ $sort: sort });
+
+        // Paginación
+        pipeline.push({ $skip: (page - 1) * limit });
+        pipeline.push({ $limit: limit });
+
+        // Ejecutar agregación
+        const jobs = await jobsModel.aggregate(pipeline);
+
+        // Obtener total para paginación
+        const countPipeline = [...pipeline.filter(stage => !stage.$skip && !stage.$limit)];
+        countPipeline.push({ $count: 'total' });
+        const totalResult = await jobsModel.aggregate(countPipeline);
+        const totalDocs = totalResult[0]?.total || 0;
+        console.log('Total Docs: ', totalDocs);
+        console.log('Jobs: ', jobs);
+        return {
+            docs: jobs,
+            totalDocs,
+            page,
+            limit,
+            hasNextPage: page * limit < totalDocs,
+            hasPrevPage: page > 1,
+            totalPages: Math.ceil(totalDocs / limit)
+        };
+    };
 
     save = (doc) => {
         return jobsModel.create(doc);

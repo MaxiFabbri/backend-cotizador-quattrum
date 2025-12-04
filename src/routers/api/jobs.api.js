@@ -4,6 +4,7 @@ import {
     readJob,
     readJobById,
     readJobByIdPopulated,
+    readJobPopulatedPaginated,
     updateJob, 
     destroyJobById
 } from "../../controllers/jobs.controllers.js";
@@ -15,9 +16,10 @@ class JobsApiRouter extends CustomRouter {
     }
     init = () => {
         this.create("/", ["USER", "ADMIN"], createJob);
-        this.read("/:id", ["USER", "ADMIN"], readJobById);
         this.read("/", ["USER", "ADMIN"], readJob);
         this.read("/populated/:id", ["USER", "ADMIN"], readJobByIdPopulated);
+        this.read("/paginated/", ["USER", "ADMIN"], readJobPopulatedPaginated);
+        this.read("/:id", ["USER", "ADMIN"], readJobById);
         this.update("/:id", ["USER", "ADMIN"], updateJob);
         this.destroy("/:id", ["USER", "ADMIN"], destroyJobById);
     };

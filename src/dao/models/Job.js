@@ -61,7 +61,7 @@ const schema = new mongoose.Schema({
     jobStatus: {
         type: String,
         required: true,
-        enum: [ 'Aprobado', 'En Producción', 'Entregado'], // Opciones permitidas
+        enum: [ 'Aprobado', 'En Producción', 'Entregado', 'Cancelado'], // Opciones permitidas
         default: 'Aprobado',
     }, 
     isKit: {

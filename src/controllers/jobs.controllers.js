@@ -29,6 +29,27 @@ async function readJobByIdPopulated(req, res) {
     const response = await jobService.getJobByIdPopulated(id);
     return res.status(200).json({ response, message });
 }
+async function readJobPopulatedPaginated(req, res) {
+    const { name, page, limit } = req.query;
+    const jobStatus = req.query.status || {$in: ['Aprobado', 'En Producción', 'Entregado']};
+    const options = {
+        page: parseInt(page) || 1,
+        limit: parseInt(limit) || 50,
+        sort: { date: -1 }
+    };
+    const message = "CUSTOMERS POPULATED PAGINATED FOUND";
+
+    try {
+        // Busco las cotizaciones por customerIds y jobStatus
+        const response = await jobService.getJobsPopulatedFilteredPaginated(name, jobStatus, options);
+        const message = "JOBS FOUND";
+        return res.status(200).json({ response, message });
+    } catch (error) {
+        console.error('Error al obtener trabajos:', error);
+        return [];
+    }
+
+}
 
 async function updateJob(req, res) {
     const userId = req.user._id; // Obtengo el userId del token
@@ -60,6 +81,7 @@ export {
     readJob,
     readJobById,
     readJobByIdPopulated,
+    readJobPopulatedPaginated,
     updateJob, 
     destroyJobById
 }
