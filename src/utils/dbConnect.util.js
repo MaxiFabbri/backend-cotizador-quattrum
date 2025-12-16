@@ -7,6 +7,7 @@ async function dbConnect() {
     } catch (error) {
         console.log(error);        
     }
+    console.log('Conexión a la base de datos establecida')
 }
 
 export default dbConnect

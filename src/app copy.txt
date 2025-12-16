@@ -1,0 +1,86 @@
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import dbConnect from "./utils/dbConnect.util.js"
+import addLogger from "./utils/logger.js";
+import envUtil from "./utils/env.util.js"
+import cors from "cors";
+import { Server } from 'socket.io';
+
+import pathHandler from "./middlewares/pathHandler.mid.js"
+import errorHandler from "./middlewares/errorHandler.mid.js"
+
+import indexRouter from "./routers/index.router.js"
+
+
+const app = express();
+const PORT = process.env.PORT || 8080;
+
+
+// CORS
+const corsOptions = {
+  origin: process.env.FRONTEND_URL,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'HEAD'],
+  preflightContinue: false,
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
+};
+app.use(cors(corsOptions));
+
+
+const ready = () => {
+    console.log("Server ready on port: ",PORT);
+    dbConnect()
+    console.log("mongodb connected");
+}
+
+// app.listen(PORT, ready)
+const httpServer = app.listen(PORT, ready);
+
+// Configuración de Socket.io
+const socketServer = new Server(httpServer);
+socketServer.on('connection', (socket) => {
+  console.log('Cliente conectado:', socket.id);
+
+  // Escuchar un evento personalizado
+  socket.on('mensaje', (data) => {
+    console.log('Mensaje recibido:', data);
+
+    // Responder al cliente que lo envió
+    socket.emit('respuesta', `Eco: ${data}`);
+
+    // Difundir a todos los demás clientes
+    socket.broadcast.emit('nuevoMensaje', data);
+  });
+
+  // Manejar desconexión
+  socket.on('disconnect', () => {
+    console.log('Cliente desconectado:', socket.id);
+  });
+});
+
+
+
+
+
+
+
+// paquete de rutas-endpoints estatico;
+app.use('/static', express.static('public'))
+
+// middlewares
+app.get('/api/health', (req, res) => {
+  res.status(200).send('OK');
+});
+
+app.use(addLogger)
+app.use(express.json())
+app.use(express.urlencoded({ extended: true }))
+//app.use(morgan("dev"))
+app.use(cookieParser(envUtil.SECRET_KEY))
+
+// Routes
+app.use(indexRouter)
+
+// Middlewares
+app.use(errorHandler)
+app.use(pathHandler)

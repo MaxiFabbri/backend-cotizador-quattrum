@@ -4,8 +4,8 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "start": "node src/app.js",
-    "dev": "node --watch src/app.js",
+    "start": "node src/src/server.js",
+    "dev": "node --watch src/server.js",
     "test": "mocha test/supertest.test.js"
   },
   "keywords": [],
@@ -22,11 +22,12 @@
     "mongoose": "^8.11.0",
     "mongoose-paginate-v2": "^1.9.1",
     "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.10.0",
+    "nodemailer": "^7.0.11",
     "passport": "^0.7.0",
     "passport-google-oauth2": "^0.2.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "socket.io": "^4.8.1",
     "winston": "^3.17.0"
   }
 }
