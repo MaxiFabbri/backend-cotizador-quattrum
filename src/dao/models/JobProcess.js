@@ -29,6 +29,26 @@ const schema = new mongoose.Schema({
         }],
         required:false
     },
+    invoices: {
+        type: [{
+            invoiceNumber: String,
+            invoiceType: {
+                type: String,
+                enum: [ 'Anticipo', 'Total', 'Mensual', 'Otro' ],  
+                required: true
+            },
+            invoiceNote: String,
+
+            payments: [{
+                paymentDate: { type: Date },
+                paymentType: {
+                    type: String,
+                    enum: [ 'Anticipo', 'Total', 'Otro' ],
+                },    
+                paymentNote: String
+            }]
+        }]
+    },
     currency: {
         type: String,
         required: true,

@@ -1,6 +1,6 @@
 import mongoose from 'mongoose';
 
-const collection = 'JobsActions';
+const collection = 'JobActions';
 
 const schema = new mongoose.Schema({
     createdAt: {
@@ -31,6 +31,6 @@ const schema = new mongoose.Schema({
     }
 })
 
-const jobsActionsModel = mongoose.model(collection,schema);
+const jobActionsModel = mongoose.model(collection,schema);
 
-export default jobsActionsModel;
+export default jobActionsModel;

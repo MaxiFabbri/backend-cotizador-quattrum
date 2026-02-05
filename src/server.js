@@ -1,5 +1,3 @@
-import http from 'http';
-import cors from 'cors';
 import { Server } from 'socket.io';
 import app from './app.js';
 import { setupWebSocketServer } from './sockets/socketHandler.js';

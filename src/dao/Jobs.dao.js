@@ -27,7 +27,7 @@ export default class jobs {
     getJobsPopulatedFilteredPaginated = async (params, options) => {
         const { page, limit, sort } = options;
         const pipeline = [];
-        console.log('Params in DAO:', params, " - ", options);
+
 
         // Lookup de cliente
         pipeline.push({
@@ -92,8 +92,8 @@ export default class jobs {
         countPipeline.push({ $count: 'total' });
         const totalResult = await jobsModel.aggregate(countPipeline);
         const totalDocs = totalResult[0]?.total || 0;
-        console.log('Total Docs: ', totalDocs);
-        console.log('Jobs: ', jobs);
+        // console.log('Total Docs: ', totalDocs);
+        // console.log('Jobs: ', jobs);
         return {
             docs: jobs,
             totalDocs,

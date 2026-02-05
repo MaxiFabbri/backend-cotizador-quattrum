@@ -11,7 +11,7 @@ import UsersActions from "../dao/UsersActions.dao.js";
 import Jobs from "../dao/Jobs.dao.js";
 import JobProducts from "../dao/JobProducts.dao.js";
 import JobProcesses from "../dao/JobProcesses.dao.js";
-import JobsActions from "../dao/JobsActions.dao.js";
+import JobActions from "../dao/JobActions.dao.js";
 import Messages from "../dao/Messages.dao.js";
 
 import UserRepository from "../repository/UserRepository.js";
@@ -43,5 +43,5 @@ export const usersActionsService = new UsersActionsRepository(new UsersActions()
 export const jobService = new JobRepository(new Jobs());
 export const jobProductService = new JobProductRepository(new JobProducts());
 export const jobProcessService = new JobProcessRepository(new JobProcesses());
-export const jobsActionsService = new JobActionsRepository(new JobsActions());
+export const jobActionsService = new JobActionsRepository(new JobActions());
 export const messagesService = new MessagesRepository(new Messages());

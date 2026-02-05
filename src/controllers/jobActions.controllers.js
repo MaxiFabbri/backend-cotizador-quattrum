@@ -1,4 +1,4 @@
-import { jobsActionsService } from "../services/index.service.js";
+import { jobActionsService } from "../services/index.service.js";
 
 
 async function readJobsActions(req, res) {

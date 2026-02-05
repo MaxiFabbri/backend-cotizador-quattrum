@@ -1,5 +1,5 @@
 import CustomRouter from "../../utils/CustomRouter.util.js";
-import { readJobsActions, readJobsActionsByJobId, readJobsActionsByUserId } from "../../controllers/jobsActions.controllers.js";
+import { readJobsActions, readJobsActionsByJobId, readJobsActionsByUserId } from "../../controllers/jobActions.controllers.js";
 	
 
 class JobsActionsApiRouter extends CustomRouter {

@@ -29,8 +29,8 @@ export function setupWebSocketServer(io) {
     socket.on('privateMessage', ({ toUserId, message }) => {
       const targetSocketId = usersMap.get(toUserId);
       console.log(`Mensaje privado de ${userId} a ${toUserId}: ${message}`);
-      if (targetSocketId) {
-        io.to(targetSocketId).emit('privateMessage', {
+      if (toUserId) {
+        io.to(toUserId).emit('privateMessage', {
           from: userId,
           message,
         });

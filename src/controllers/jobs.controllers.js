@@ -1,4 +1,4 @@
-import { jobService, jobProductService, jobProcessService } from "../services/index.service.js";
+import { jobService, jobProductService, jobProcessService, jobActionsService } from "../services/index.service.js";
 
 async function createJob(req, res) {
     const message = "JOB CREATED";
@@ -10,6 +10,19 @@ async function createJob(req, res) {
     if (!response) {
         return res.status(400).json({ message: "Error creating Job" });
     }
+
+    // preparo la informacion
+    const jobAction = {
+        userId: userId,
+        action: "CREATE",
+        jobModifiedId: response._id,
+        payload: data,
+        oprationSuccess: true
+    };
+
+    // grabo el movimiento
+    await jobActionsService.create(jobAction);
+
     return res.status(201).json({ response, message });
 }
 async function readJob(req, res) {
@@ -31,7 +44,7 @@ async function readJobByIdPopulated(req, res) {
 }
 async function readJobPopulatedPaginated(req, res) {
     const { name, page, limit } = req.query;
-    const jobStatus = req.query.status || {$in: ['Aprobado', 'En Producción', 'Entregado']};
+    const jobStatus = req.query.status || {$in: [ 'Aprobado', 'En Producción', 'Para Entregar', 'Entregado', 'Cerrado', 'Anulado']};
     const options = {
         page: parseInt(page) || 1,
         limit: parseInt(limit) || 50,
@@ -62,7 +75,19 @@ async function updateJob(req, res) {
     if (!response) {
         return res.status(404).json({ message: "JOB not found" });
     }
-    
+
+    // preparo la informacion
+    const jobAction = {
+        userId: userId,
+        action: "UPDATE",
+        jobModifiedId: id,
+        payload: data,
+        oprationSuccess: true
+    };
+
+    // grabo el movimiento
+    await jobActionsService.create(jobAction);
+
     return res.status(200).json({ response, message });
 }
 
@@ -73,6 +98,19 @@ async function destroyJobById(req, res) {
     if (!response) {
         return res.status(404).json({ message: "Job not found" });
     }
+
+    // preparo la informacion
+    const jobAction = {
+        userId: userId,
+        action: "DELETE",
+        jobModifiedId: id,
+        payload: data,
+        oprationSuccess: true
+    };
+
+    // grabo el movimiento
+    await jobActionsService.create(jobAction);
+
     return res.status(200).json({ response, message });
 }
 

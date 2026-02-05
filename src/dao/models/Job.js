@@ -40,6 +40,27 @@ const schema = new mongoose.Schema({
         }],
         required:false
     },
+    invoices: {
+        type: [{
+            invoiceNumber: String,
+            invoiceType: {
+                type: String,
+                enum: [ 'Anticipo', 'Total', 'Otro' ],  
+                required: true
+            },
+            invoiceNote: String,
+
+            collections: [{
+                collectionDate: { type: Date },
+                collectionType: {
+                    type: String,
+                    enum: [ 'Anticipo', 'Total', 'Otro' ],
+                },    
+                collectionNote: String
+            }]
+        }]
+    },
+
     monthlyRate: {
         type: Number,
         required: false
@@ -61,7 +82,7 @@ const schema = new mongoose.Schema({
     jobStatus: {
         type: String,
         required: true,
-        enum: [ 'Aprobado', 'En Producción', 'Entregado', 'Cancelado'], // Opciones permitidas
+        enum: [ 'Aprobado', 'En Producción', 'Para Entregar', 'Entregado', 'Cerrado', 'Anulado'], // Opciones permitidas
         default: 'Aprobado',
     }, 
     isKit: {
@@ -72,11 +93,6 @@ const schema = new mongoose.Schema({
     jobNotes: {
         type: String,
         required: false,
-    },
-    calculateFinancing: {
-        type: Boolean,
-        required: false,
-        default: false
     }
 })
 
