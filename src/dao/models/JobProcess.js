@@ -34,7 +34,7 @@ const schema = new mongoose.Schema({
             invoiceNumber: String,
             invoiceType: {
                 type: String,
-                enum: [ 'Anticipo', 'Total', 'Mensual', 'Otro' ],  
+                enum: [ 'Anticipado', 'Contra Entrega', 'Mensual', 'Otro' ],  
                 required: true
             },
             invoiceNote: String,

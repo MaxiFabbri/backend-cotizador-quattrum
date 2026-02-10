@@ -45,7 +45,7 @@ const schema = new mongoose.Schema({
             invoiceNumber: String,
             invoiceType: {
                 type: String,
-                enum: [ 'Anticipo', 'Total', 'Otro' ],  
+                enum: [ 'Anticipado', 'Contra Entrega', 'Otro' ],  
                 required: true
             },
             invoiceNote: String,
@@ -82,7 +82,7 @@ const schema = new mongoose.Schema({
     jobStatus: {
         type: String,
         required: true,
-        enum: [ 'Aprobado', 'En Producción', 'Para Entregar', 'Entregado', 'Cerrado', 'Anulado'], // Opciones permitidas
+        enum: [ 'Aprobado', 'En Preparación', 'En Producción', 'Listo', 'Entregado', 'Cerrado', 'Anulado'], // Opciones permitidas
         default: 'Aprobado',
     }, 
     isKit: {
