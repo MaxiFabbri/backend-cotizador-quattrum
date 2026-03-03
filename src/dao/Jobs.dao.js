@@ -23,10 +23,11 @@ export default class jobs {
                 path: 'paymentMethodId',
             })
     }
-    
+
     getJobsPopulatedFilteredPaginated = async (params, options) => {
         const { page, limit, sort } = options;
         const pipeline = [];
+        console.log("Jobs Dao Params: ", params)
 
 
         // Lookup de cliente
@@ -38,13 +39,13 @@ export default class jobs {
                 as: 'customer'
             }
         });
+
         pipeline.push({
             $unwind: {
                 path: '$customer',
                 preserveNullAndEmptyArrays: true
             }
-        });    
-
+        });
         // Lookup de productos
         pipeline.push({
             $lookup: {
@@ -52,6 +53,36 @@ export default class jobs {
                 localField: '_id',
                 foreignField: 'jobId',
                 as: 'jobProducts'
+            }
+        });
+        // Lookup de procesos
+        pipeline.push({
+            $lookup: {
+                from: 'jobprocesses',
+                let: { jobId: '$_id' },
+                pipeline: [
+                    { $match: { $expr: { $eq: ['$jobId', '$$jobId'] } } },
+                    {
+                        $lookup: {
+                            from: 'suppliers',
+                            let: { supplierId: '$supplierId' },
+                            pipeline: [
+                                { $match: { $expr: { $eq: ['$_id', '$$supplierId'] } } },
+                                { $project: { _id: 0, supplierName: '$name' } } // renombramos aquí
+                            ],
+                            as: 'supplier'
+                        }
+                    },
+                    { $unwind: { path: '$supplier', preserveNullAndEmptyArrays: true } },
+                    // opcional: mover supplierName al nivel raíz del jobProcess
+                    {
+                        $addFields: {
+                            supplierName: '$supplier.supplierName'
+                        }
+                    },
+                    { $project: { supplier: 0 } } // si no querés el objeto supplier completo
+                ],
+                as: 'jobProcesses'
             }
         });
 
@@ -73,8 +104,23 @@ export default class jobs {
             matchConditions.push({ jobStatus: params.jobStatus });
         }
 
+        // Boolean flags
+        const boolParams = [
+            "hasInvoicesPendingIssuance",
+            "hasCollectionsPending",
+            "hasPurchaseInvocesToRecieve",
+            "hasPaymentsToMake"
+        ];
+
+        boolParams.forEach(param => {
+            if (params[param] === true || params[param] === "true") {
+                matchConditions.push({ [param]: true });
+            }
+        });
+
+
         if (matchConditions.length > 0) {
-            pipeline.push({ $match: { $and: matchConditions } });
+            pipeline.push({ $match: { $or: matchConditions } });
         }
 
         // Ordenar
@@ -87,13 +133,13 @@ export default class jobs {
         // Ejecutar agregación
         const jobs = await jobsModel.aggregate(pipeline);
 
+
         // Obtener total para paginación
         const countPipeline = [...pipeline.filter(stage => !stage.$skip && !stage.$limit)];
         countPipeline.push({ $count: 'total' });
         const totalResult = await jobsModel.aggregate(countPipeline);
         const totalDocs = totalResult[0]?.total || 0;
-        // console.log('Total Docs: ', totalDocs);
-        // console.log('Jobs: ', jobs);
+
         return {
             docs: jobs,
             totalDocs,

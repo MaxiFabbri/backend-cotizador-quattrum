@@ -71,8 +71,8 @@ const schema = new mongoose.Schema({
     jobProductStatus: {
         type: String,
         required: true,
-        // enum: ['Pendiente', 'En Proceso', 'Terminado', 'Entregado'], // Opciones permitidas
-        default: 'Pendiente',
+        enum: ['En Preparación', 'En Producción', 'Listo', 'Entregado'], // Opciones permitidas
+        default: 'En Preparación',
     }
 })
 

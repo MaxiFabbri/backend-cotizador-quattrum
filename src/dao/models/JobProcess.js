@@ -3,6 +3,10 @@ import mongoose from 'mongoose';
 const collection = 'JobProcesses';
 
 const schema = new mongoose.Schema({
+    jobId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Jobs'
+    },
     jobProductId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'JobProducts'
@@ -38,7 +42,8 @@ const schema = new mongoose.Schema({
                 required: true
             },
             invoiceNote: String,
-
+            isInvoicePendingReception: Boolean,
+            hasPaymentsPending: Boolean,
             payments: [{
                 paymentDate: { type: Date },
                 paymentType: {

@@ -21,16 +21,16 @@ const schema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    quotationId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'Quotations',
-        required: false
-    },
     jobId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Jobs',
         required: false
     },
+    status: {
+        type: String,
+        enum: ['pending', 'delivered', 'read'],
+        default: 'pending'
+    }
 })
 
 const messagesModel = mongoose.model(collection,schema);

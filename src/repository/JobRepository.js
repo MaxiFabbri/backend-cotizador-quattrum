@@ -10,8 +10,8 @@ export default class JobRepository extends GenericRepository{
     getJobByIdPopulated = (id) =>{
         return this.dao.getOneJobByIdwithCustomerDetails(id)
     }
-    getJobsPopulatedFilteredPaginated = (name, jobStatus, options) => {
-        return this.dao.getJobsPopulatedFilteredPaginated({ name, jobStatus }, options);
+    getJobsPopulatedFilteredPaginated = (filters, options) => {
+        return this.dao.getJobsPopulatedFilteredPaginated(filters, options);
     }
     deleteJobById = (id) =>{
         return this.delete(id)

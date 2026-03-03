@@ -49,7 +49,8 @@ const schema = new mongoose.Schema({
                 required: true
             },
             invoiceNote: String,
-
+            isPendingIssuance: Boolean,
+            hasCollectionsPending: Boolean,
             collections: [{
                 collectionDate: { type: Date },
                 collectionType: {
@@ -60,7 +61,6 @@ const schema = new mongoose.Schema({
             }]
         }]
     },
-
     monthlyRate: {
         type: Number,
         required: false
@@ -82,9 +82,29 @@ const schema = new mongoose.Schema({
     jobStatus: {
         type: String,
         required: true,
-        enum: [ 'Aprobado', 'En Preparación', 'En Producción', 'Listo', 'Entregado', 'Cerrado', 'Anulado'], // Opciones permitidas
-        default: 'Aprobado',
-    }, 
+        enum: [ 'Aprobado','Nuevo', 'En Preparación', 'En Producción', 'Listo', 'Entregado', 'Cerrado', 'Anulado'], // Opciones permitidas
+        default: 'Nuevo',
+    },
+    hasInvoicesPendingIssuance: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+    hasCollectionsPending: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+    hasPurchaseInvocesToRecieve: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
+    hasPaymentsToMake: {
+        type: Boolean,
+        required: true,
+        default: true
+    },
     isKit: {
         type: Boolean,
         required: true,

@@ -44,17 +44,34 @@ async function readJobByIdPopulated(req, res) {
 }
 async function readJobPopulatedPaginated(req, res) {
     const { name, page, limit } = req.query;
-    const jobStatus = req.query.status || {$in: [ 'Aprobado', 'En Producción', 'Para Entregar', 'Entregado', 'Cerrado', 'Anulado']};
+    const jobStatus = req.query.status || { $in: ['Nuevo', 'En Preparación', 'En Producción', 'Listo', 'Entregado'] };
     const options = {
         page: parseInt(page) || 1,
         limit: parseInt(limit) || 50,
         sort: { date: -1 }
     };
+
+    const filters = { status: jobStatus };
+    if (name) filters.name = { $regex: name, $options: 'i' };
+
+    const boolParams = [
+        "hasInvoicesPendingIssuance",
+        "hasCollectionsPending",
+        "hasPurchaseInvocesToRecieve",
+        "hasPaymentsToMake"
+    ];
+
+    boolParams.forEach(param => {
+        if (req.query[param] === "true") {
+            filters[param] = true;
+        }
+    });
+
     const message = "CUSTOMERS POPULATED PAGINATED FOUND";
 
     try {
         // Busco las cotizaciones por customerIds y jobStatus
-        const response = await jobService.getJobsPopulatedFilteredPaginated(name, jobStatus, options);
+        const response = await jobService.getJobsPopulatedFilteredPaginated(filters, options);
         const message = "JOBS FOUND";
         return res.status(200).json({ response, message });
     } catch (error) {
@@ -115,11 +132,11 @@ async function destroyJobById(req, res) {
 }
 
 export {
-    createJob, 
+    createJob,
     readJob,
     readJobById,
     readJobByIdPopulated,
     readJobPopulatedPaginated,
-    updateJob, 
+    updateJob,
     destroyJobById
 }
