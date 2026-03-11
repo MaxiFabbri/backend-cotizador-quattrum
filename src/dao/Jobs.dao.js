@@ -27,8 +27,6 @@ export default class jobs {
     getJobsPopulatedFilteredPaginated = async (params, options) => {
         const { page, limit, sort } = options;
         const pipeline = [];
-        console.log("Jobs Dao Params: ", params)
-
 
         // Lookup de cliente
         pipeline.push({
@@ -39,7 +37,7 @@ export default class jobs {
                 as: 'customer'
             }
         });
-
+        // Unwind del cliente
         pipeline.push({
             $unwind: {
                 path: '$customer',
@@ -90,18 +88,17 @@ export default class jobs {
         const matchConditions = [];
 
         if (params.name) {
-            const regex = new RegExp(params.name, 'i');
             matchConditions.push({
                 $or: [
-                    { 'customer.name': { $regex: regex } },
-                    { 'customer.code': { $regex: regex } },
-                    { jobProducts: { $elemMatch: { jobProductDescription: { $regex: regex } } } }
+                    { "customer.name": params.name },
+                    { "customer.code": params.name },
+                    { "jobProducts.jobProductDescription": params.name }
                 ]
             });
         }
 
-        if (params.jobStatus) {
-            matchConditions.push({ jobStatus: params.jobStatus });
+        if (params.status) {
+            matchConditions.push({ jobStatus: params.status });
         }
 
         // Boolean flags
@@ -118,9 +115,8 @@ export default class jobs {
             }
         });
 
-
         if (matchConditions.length > 0) {
-            pipeline.push({ $match: { $or: matchConditions } });
+            pipeline.push({ $match: { $and: matchConditions } });
         }
 
         // Ordenar

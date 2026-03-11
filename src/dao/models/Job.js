@@ -20,7 +20,13 @@ const schema = new mongoose.Schema({
     },
     deliveryDate: {
         type: Date,
+        default: null,
         required: false
+    },
+    isDateCritical: {
+        type: Boolean,
+        required: true,
+        default: false
     },
     customerId: {
         type: mongoose.Schema.Types.ObjectId,
@@ -113,6 +119,31 @@ const schema = new mongoose.Schema({
     jobNotes: {
         type: String,
         required: false,
+    },
+    jobEvents: {
+        type: [{
+            eventDate: {
+                type: Date,
+                required: true,
+                default: Date.now
+            },
+            eventUserId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Users',
+                required: true
+            },
+            eventUserName: {
+                type: String,
+                required: true
+            },
+            eventProductId: {
+                type: mongoose.Schema.Types.ObjectId,
+                ref: 'Products',
+                required: false
+            },
+            eventNote: String
+        }],
+        required: false
     }
 })
 

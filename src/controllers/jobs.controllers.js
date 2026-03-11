@@ -38,7 +38,7 @@ async function readJobById(req, res) {
 }
 async function readJobByIdPopulated(req, res) {
     const { id } = req.params;
-    const message = "QUOTATIONS FOUND";
+    const message = "JOB FOUND";
     const response = await jobService.getJobByIdPopulated(id);
     return res.status(200).json({ response, message });
 }

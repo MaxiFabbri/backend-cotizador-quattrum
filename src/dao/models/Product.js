@@ -48,7 +48,7 @@ const schema = new mongoose.Schema({
         required: true,
         default: false
     },
-    jobProductDescription: {
+    productDescription: {
         type: String,
         required: false
     },
