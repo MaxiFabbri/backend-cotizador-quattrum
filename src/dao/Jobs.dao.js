@@ -78,7 +78,8 @@ export default class jobs {
                             supplierName: '$supplier.supplierName'
                         }
                     },
-                    { $project: { supplier: 0 } } // si no querés el objeto supplier completo
+                    { $project: { supplier: 0 } }, // si no querés el objeto supplier completo
+                    { $sort: { order: 1}}
                 ],
                 as: 'jobProcesses'
             }

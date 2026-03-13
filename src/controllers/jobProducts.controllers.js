@@ -20,7 +20,7 @@ async function readJobProduct(req, res) {
 async function readJobProductById(req, res) {
     const { id } = req.params;
     const message = "JOB PRODUCT FOUND";
-    const response = await jobProductService.getJobById(id);
+    const response = await jobProductService.getJobProductById(id);
     return res.status(200).json({ response, message });
 }
 async function readJobProductByJobId(req, res) {
