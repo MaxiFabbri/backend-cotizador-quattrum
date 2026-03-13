@@ -6,6 +6,7 @@ function getUsersObject(usersMap) {
 }
 
 export function setupWebSocketServer(io) {
+  console.log("New Websocket Server")
   // Manejar conexiones de clientes
   io.on('connection', (socket) => {
     console.log('Cliente conectado:', socket.id, " - ", socket.handshake.auth.userId, "- ", socket.handshake.auth.userName);
