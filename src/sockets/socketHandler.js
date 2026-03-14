@@ -2,7 +2,10 @@ import { messagesService } from "../services/index.service.js";
 
 const usersMap = new Map();
 function getUsersObject(usersMap) {
-  return Object.fromEntries(usersMap);
+  console.log("getUsersObject: ",usersMap)
+  const response = Object.fromEntries(usersMap);
+  console.log("Response en getUsersObject: ",response)
+  return response
 }
 
 export function setupWebSocketServer(io) {
