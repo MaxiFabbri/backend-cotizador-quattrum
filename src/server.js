@@ -20,4 +20,4 @@ const io = new Server(httpServer, {
 });
 
 // Configurar los manejadores de eventos de WebSocket
-// setupWebSocketServer(io);
+setupWebSocketServer(io);
