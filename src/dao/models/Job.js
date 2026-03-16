@@ -61,7 +61,7 @@ const schema = new mongoose.Schema({
                 collectionDate: { type: Date },
                 collectionType: {
                     type: String,
-                    enum: [ 'Anticipo', 'Total', 'Otro' ],
+                    enum: [ 'Anticipo', 'Saldo', 'Total', 'Otro' ],
                 },    
                 collectionNote: String
             }]

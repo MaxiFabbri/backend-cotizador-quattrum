@@ -48,7 +48,7 @@ const schema = new mongoose.Schema({
                 paymentDate: { type: Date },
                 paymentType: {
                     type: String,
-                    enum: [ 'Anticipo', 'Total', 'Otro' ],
+                    enum: [ 'Anticipo', 'Saldo', 'Total', 'Otro' ],
                 },    
                 paymentNote: String
             }]
