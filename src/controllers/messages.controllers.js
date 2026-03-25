@@ -32,5 +32,30 @@ async function readMessagesByJobId(req, res) {
     const response = await messagesService.get({"jobId":id});
     return res.status(200).json({ response, message });
 }
+async function readMessagesPendingByUserId(req, res) {
+    const { userId } = req.params;
+    const message = "MESSAGES FOUND";
+    const response = await messagesService.getPendingByUserId({
+      receiverUserId: userId,
+      status: "pending"
+    });
+    return res.status(200).json({ response, message });
+}
+async function updateMessageById(req,res) {
+    const data = req.body
+    const { id } = req.params;
+    console.log("messages controller id: ", id, " Data: ", data)
+    const message = "MESSAGES UPDATED";
+    const response = await messagesService.update( id, data );
+    return res.status(200).json({ response, message });
+}
 
-export { readMessages, readMessagesByUserId, readMessagesByMessageId, readMessagesByJobId, createMessage };
+export {
+  readMessages,
+  readMessagesPendingByUserId,
+  readMessagesByUserId,
+  readMessagesByMessageId,
+  readMessagesByJobId,
+  createMessage,
+  updateMessageById,
+};

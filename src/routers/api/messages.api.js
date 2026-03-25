@@ -1,5 +1,13 @@
 import CustomRouter from "../../utils/CustomRouter.util.js";
-import { createMessage, readMessages, readMessagesByUserId, readMessagesByJobId, readMessagesByMessageId } from "../../controllers/messages.controllers.js";	
+import {
+  createMessage,
+  readMessages,
+  readMessagesByUserId,
+  readMessagesByJobId,
+  readMessagesByMessageId,
+  updateMessageById,
+  readMessagesPendingByUserId,
+} from "../../controllers/messages.controllers.js";	
 
 class MessagesApiRouter extends CustomRouter {
     constructor() {
@@ -8,10 +16,12 @@ class MessagesApiRouter extends CustomRouter {
     }
     init = () => {
         this.create("/", ["USER", "ADMIN"], createMessage);
-        this.read("/", ["PUBLIC", "ADMIN"], readMessages);
-        this.read("/user/:id", ["PUBLIC", "ADMIN"], readMessagesByUserId);
-        this.read("/job/:id", ["PUBLIC", "ADMIN"], readMessagesByJobId);
-        this.read("/message/:id", ["PUBLIC", "ADMIN"], readMessagesByMessageId);
+        this.read("/:id", ["USER", "ADMIN"], readMessagesByMessageId);
+        this.read("/", ["USER", "ADMIN"], readMessages);
+        this.read("/user/:id", ["USER", "ADMIN"], readMessagesByUserId);
+        this.read("/job/:id", ["USER", "ADMIN"], readMessagesByJobId);
+        this.read("/pending/:userId", ["USER", "ADMIN"], readMessagesPendingByUserId);
+        this.update("/:id", ["USER", "ADMIN"], updateMessageById)
     
     };
 }

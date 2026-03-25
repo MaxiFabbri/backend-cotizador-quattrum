@@ -1,57 +1,66 @@
-import { messagesService } from "../services/index.service.js";	
+import { messagesService } from "../services/index.service.js";
+import { handlePrivateMessage } from "./handlers/privateMessageHandler.js";
 
 const usersMap = new Map();
 function getUsersObject(usersMap) {
-  console.log("getUsersObject: ",usersMap)
-  const response = Object.fromEntries(usersMap);
-  console.log("Response en getUsersObject: ",response)
-  return response
+  return Object.fromEntries(usersMap);
 }
 
 export function setupWebSocketServer(io) {
-  console.log("New Websocket Server")
+  console.log("New Websocket Server");
   // Manejar conexiones de clientes
-  io.on('connection', (socket) => {
-    console.log('Cliente conectado:', socket.id, " - ", socket.handshake.auth.userId, "- ", socket.handshake.auth.userName);
+  io.on("connection", async (socket) => {
+    console.log(
+      "Cliente conectado:",
+      socket.id,
+      " - ",
+      socket.handshake.auth.userId,
+      "- ",
+      socket.handshake.auth.userName
+    );
     const { userId } = socket.handshake.auth;
-    usersMap.set( userId, socket.id );
-    io.emit('usersUpdate', getUsersObject(usersMap)); 
+    const query = {
+      receiverUserId: userId,
+      status: "pending",
+    };
+    const pendingMessages = await messagesService.getPendingByUserId(query);
+    if (pendingMessages.length > 0) {
+      // console.log("Pending messages: ", pendingMessages);
+      // socket.emit("pendingMessages", pendingMessages);
+    }
+
+    usersMap.set(userId, socket.id);
+    io.emit("usersUpdate", getUsersObject(usersMap));
 
     // Mensajes a todos
-    socket.on('message', async (data) => {
-      console.log('Mensaje recibido:', data);
+    socket.on("message", async (data) => {
+      console.log("Mensaje recibido:", data);
       await messagesService.create({ emiterUserId: userId, message: data });
 
       // Responder al cliente que lo envió
-      socket.emit('response', `Eco: ${data}`);
+      socket.emit("response", `Eco: ${data}`);
 
       // Difundir a todos los demás clientes
-      socket.broadcast.emit('newMessage', data);
+      socket.broadcast.emit("newMessage", data);
     });
 
     // Mensajes a un usuario
-    socket.on('privateMessage', ({ toUserId, message }) => {
-      const targetSocketId = usersMap.get(toUserId);
-      console.log(`Mensaje privado de ${userId} a ${toUserId}: ${message}`);
-      if (toUserId) {
-        io.to(toUserId).emit('privateMessage', {
-          from: userId,
-          message,
-        });
-      } else {
-        socket.emit('errorMessage', `Usuario ${toUserId} no está conectado`);
-      }
+    socket.on("privateMessage", ({ toUserId, message }) => {
+      const payload = {
+        toUserId,
+        message,
+      };
+      handlePrivateMessage(socket, payload, usersMap, io)
     });
 
     // Manejar desconexión
-    socket.on('disconnect', () => {
+    socket.on("disconnect", () => {
       usersMap.forEach((value, key) => {
         if (value === socket.id) {
           usersMap.delete(key);
         }
       });
-      io.emit('usersUpdate', getUsersObject(usersMap));
+      io.emit("usersUpdate", getUsersObject(usersMap));
     });
-        
   });
 }
