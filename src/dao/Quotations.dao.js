@@ -116,8 +116,8 @@ export default class quotations {
             pipeline.push({ $match: { $and: matchConditions } });
         }
 
-        // Ordenar
-        pipeline.push({ $sort: sort });
+        // Order by date
+        pipeline.push({ $sort: { date: -1 } });
 
         // Paginación
         pipeline.push({ $skip: (page - 1) * limit });
