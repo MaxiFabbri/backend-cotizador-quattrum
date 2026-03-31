@@ -83,7 +83,7 @@ async function readJobPopulatedPaginated(req, res) {
   const options = {
     page: parseInt(page) || 1,
     limit: parseInt(limit) || 50,
-    sort: { date: -1 },
+    sort: { approvalDate: -1 },
   };
 
 
