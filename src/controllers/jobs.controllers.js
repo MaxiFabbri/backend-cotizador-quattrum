@@ -50,8 +50,6 @@ async function readJobByIdPopulated(req, res) {
 async function readJobPopulatedPaginated(req, res) {
   const { name, page, limit } = req.query;
   let jobStatus = req.query.status;
-  console.log("req.query: ",req.query)
-  console.log("Job Status en controller Antes: ", jobStatus);
   if (jobStatus === "Todos") {
     // No aplicar filtro, dejar undefined
     jobStatus = undefined
@@ -61,8 +59,6 @@ async function readJobPopulatedPaginated(req, res) {
       $in: ["Nuevo", "En Preparación", "En Producción", "Listo", "Entregado"],
     };
   }
-
-  console.log("Job Status en controller Despues: ", jobStatus);
 
   const filters = { status: jobStatus };
   if (name) filters.name = { $regex: name, $options: "i" };
