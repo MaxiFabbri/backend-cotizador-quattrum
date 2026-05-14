@@ -53,6 +53,10 @@ async function readJobPopulatedPaginated(req, res) {
   if (jobStatus === "Todos") {
     // No aplicar filtro, dejar undefined
     jobStatus = undefined
+  } else if (jobStatus === "ActivosProduccion") {
+    jobStatus = {
+      $in: ["Nuevo", "En Preparación", "En Producción", "Listo"],
+    };
   } else {
     // Si no es "Todos", usar el valor o el conjunto por defecto
     jobStatus = jobStatus || {
