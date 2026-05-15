@@ -81,17 +81,27 @@ export default class quotations {
         });    
 
         // Lookup de productos ordenados por order
+        // pipeline.push({
+        //   $lookup: {
+        //     from: "products",
+        //     let: { quotationId: "$_id" },
+        //     pipeline: [
+        //       { $match: { $expr: { $eq: ["$quotationId", "$$quotationId"] } } },
+        //       { $sort: { order: 1 } },
+        //     ],
+        //     as: "products",
+        //   },
+        // });
+
         pipeline.push({
           $lookup: {
             from: "products",
-            let: { quotationId: "$_id" },
-            pipeline: [
-              { $match: { $expr: { $eq: ["$quotationId", "$$quotationId"] } } },
-              { $sort: { order: 1 } },
-            ],
+            localField: "_id", // campo en la colección principal
+            foreignField: "quotationId", // campo en la colección relacionada
             as: "products",
           },
         });
+
 
 
         // Filtro por nombre parcial (name) y estado (quoteStatus)
