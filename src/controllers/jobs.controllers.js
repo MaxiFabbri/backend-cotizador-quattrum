@@ -107,7 +107,7 @@ async function updateJob(req, res) {
   const userId = req.user._id; // Obtengo el userId del token
   const { id } = req.params;
   const data = {
-    ...req.body,
+    ...req.body
   };
   const message = "JOB UPDATED";
   const response = await jobService.update(id, data);

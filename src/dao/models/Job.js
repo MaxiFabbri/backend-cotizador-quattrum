@@ -178,6 +178,10 @@ const schema = new mongoose.Schema({
     required: false,
     default: [],
   },
+  updatedAt: {
+    type: Date,
+    required: false,
+  }
 });
 
 schema.plugin(mongoosePaginate);

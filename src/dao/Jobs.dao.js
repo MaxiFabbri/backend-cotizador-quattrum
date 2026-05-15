@@ -94,7 +94,7 @@ export default class jobs {
           { "customer.code": params.name },
           { "jobProducts.jobProductDescription": params.name },
           {
-            "jobProcesses": { $elemMatch: { supplierName: params.name } },
+            jobProcesses: { $elemMatch: { supplierName: params.name } },
           },
         ],
       });
@@ -156,7 +156,16 @@ export default class jobs {
   };
 
   update = (id, doc) => {
-    return jobsModel.findByIdAndUpdate(id, { $set: doc });
+    return jobsModel.findByIdAndUpdate(
+      id,
+      {
+        $set: {
+          ...doc,
+          updatedAt: Date.now(), // fuerza actualización de la fecha
+        },
+      },
+      { new: true } // devuelve el documento ya actualizado
+    );
   };
 
   delete = (id) => {

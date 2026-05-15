@@ -8,6 +8,8 @@ import {
     updateJob, 
     destroyJobById
 } from "../../controllers/jobs.controllers.js";
+import checkConcurrency from "../../middlewares/checkConcurrency.js";
+
 
 class JobsApiRouter extends CustomRouter {
     constructor() {
@@ -20,7 +22,7 @@ class JobsApiRouter extends CustomRouter {
         this.read("/populated/:id", ["USER", "ADMIN"], readJobByIdPopulated);
         this.read("/paginated/", ["USER", "ADMIN"], readJobPopulatedPaginated);
         this.read("/:id", ["USER", "ADMIN"], readJobById);
-        this.update("/:id", ["USER", "ADMIN"], updateJob);
+        this.update("/:id", ["USER", "ADMIN"], checkConcurrency, updateJob);
         this.destroy("/:id", ["USER", "ADMIN"], destroyJobById);
     };
 }
