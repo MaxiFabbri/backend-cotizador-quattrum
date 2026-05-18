@@ -8,52 +8,51 @@ function getUsersObject(usersMap) {
 
 export function setupWebSocketServer(io) {
   console.log("New Websocket Server");
-  // Manejar conexiones de clientes
+
   io.on("connection", async (socket) => {
-    console.log(
-      "Cliente conectado:",
-      socket.id,
-      " - ",
-      socket.handshake.auth.userId,
-      "- ",
-      socket.handshake.auth.userName
-    );
-    const { userId } = socket.handshake.auth;
-    const query = {
-      receiverUserId: userId,
-      status: "pending",
-    };
-    const pendingMessages = await messagesService.getPendingByUserId(query);
-    if (pendingMessages.length > 0) {
-      // console.log("Pending messages: ", pendingMessages);
-      // socket.emit("pendingMessages", pendingMessages);
-    }
+    const { userId, userName } = socket.handshake.auth;
+    console.log("Cliente conectado:", socket.id, "-", userId, "-", userName);
 
     usersMap.set(userId, socket.id);
     io.emit("usersUpdate", getUsersObject(usersMap));
 
-    // Mensajes a todos
+    // 🔹 Escuchar cuando un usuario abre un job
+    socket.on("job:open", ({ jobId, userId }) => {
+      console.log(`Recibido Job:open Usuario ${userId} abrió el job ${jobId} con el socketId ${socket.id}`);
+      const room = io.sockets.adapter.rooms.get(jobId);
+      console.log("Room: ", room, " - JobId: ", jobId)
+      if (room) {
+        // room es un Set con los socket.id de todos los que están en la room
+        socket.emit("job:open:response", { jobId });
+
+        // Avisar a los demás en esa room
+        socket.to(jobId).emit("job:userJoined", { jobId });
+      }
+
+      socket.join(jobId); // se une a la "room" del job      
+    });    
+
+    // 🔹 Escuchar cuando un usuario cierra un job
+    socket.on("job:close", ({ jobId, userId }) => {
+      console.log(`Usuario ${userId} cerró el job ${jobId}`);
+      socket.leave(jobId);
+      socket.to(jobId).emit("job:userLeft", { jobId, userId });
+    });
+
+    // 🔹 Mensajes broadcast
     socket.on("message", async (data) => {
       console.log("Mensaje recibido:", data);
       await messagesService.create({ emiterUserId: userId, message: data });
-
-      // Responder al cliente que lo envió
       socket.emit("response", `Eco: ${data}`);
-
-      // Difundir a todos los demás clientes
       socket.broadcast.emit("newMessage", data);
     });
 
-    // Mensajes a un usuario
+    // 🔹 Mensajes privados
     socket.on("privateMessage", ({ toUserId, message }) => {
-      const payload = {
-        toUserId,
-        message,
-      };
-      handlePrivateMessage(socket, payload, usersMap, io)
+      handlePrivateMessage(socket, { toUserId, message }, usersMap, io);
     });
 
-    // Manejar desconexión
+    // 🔹 Desconexión
     socket.on("disconnect", () => {
       usersMap.forEach((value, key) => {
         if (value === socket.id) {
