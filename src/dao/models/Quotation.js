@@ -12,6 +12,10 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customers'
     },
+    customerNote: {
+        type: String,
+        required: false
+    },
     paymentMethodId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'CustomerPaymentMethod'

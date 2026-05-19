@@ -18,9 +18,9 @@ export function setupWebSocketServer(io) {
 
     // 🔹 Escuchar cuando un usuario abre un job
     socket.on("job:open", ({ jobId, userId }) => {
-      console.log(`Recibido Job:open Usuario ${userId} abrió el job ${jobId} con el socketId ${socket.id}`);
+
       const room = io.sockets.adapter.rooms.get(jobId);
-      console.log("Room: ", room, " - JobId: ", jobId)
+
       if (room) {
         // room es un Set con los socket.id de todos los que están en la room
         socket.emit("job:open:response", { jobId });
@@ -34,7 +34,7 @@ export function setupWebSocketServer(io) {
 
     // 🔹 Escuchar cuando un usuario cierra un job
     socket.on("job:close", ({ jobId, userId }) => {
-      console.log(`Usuario ${userId} cerró el job ${jobId}`);
+
       socket.leave(jobId);
       socket.to(jobId).emit("job:userLeft", { jobId, userId });
     });
