@@ -80,19 +80,6 @@ export default class quotations {
             }
         });    
 
-        // Lookup de productos ordenados por order
-        // pipeline.push({
-        //   $lookup: {
-        //     from: "products",
-        //     let: { quotationId: "$_id" },
-        //     pipeline: [
-        //       { $match: { $expr: { $eq: ["$quotationId", "$$quotationId"] } } },
-        //       { $sort: { order: 1 } },
-        //     ],
-        //     as: "products",
-        //   },
-        // });
-
         pipeline.push({
           $lookup: {
             from: "products",
@@ -101,8 +88,6 @@ export default class quotations {
             as: "products",
           },
         });
-
-
 
         // Filtro por nombre parcial (name) y estado (quoteStatus)
         const matchConditions = [];
@@ -113,7 +98,8 @@ export default class quotations {
                 $or: [
                     { 'customer.name': { $regex: regex } },
                     { 'customer.code': { $regex: regex } },
-                    { products: { $elemMatch: { productDescription: { $regex: regex } } } }
+                    { products: { $elemMatch: { productDescription: { $regex: regex } } } },
+                    { customerNote: { $regex: regex } }
                 ]
             });
         }
