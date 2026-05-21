@@ -79,12 +79,33 @@ export default class quotations {
                 preserveNullAndEmptyArrays: true
             }
         });    
-
+        // lookup de products
         pipeline.push({
           $lookup: {
             from: "products",
-            localField: "_id", // campo en la colección principal
-            foreignField: "quotationId", // campo en la colección relacionada
+            let: { quotationId: "$_id" },
+            pipeline: [
+              {
+                $match: {
+                  $expr: { $eq: ["$quotationId", "$$quotationId"] },
+                },
+              },
+              {
+                $lookup: {
+                  from: "processes",
+                  let: { productId: "$_id" },
+                  pipeline: [
+                    {
+                      $match: {
+                        $expr: { $eq: ["$productId", "$$productId"] },
+                      },
+                    },
+                    { $project: { description: 1 } },
+                  ],
+                  as: "processes",
+                },
+              },
+            ],
             as: "products",
           },
         });
@@ -99,6 +120,7 @@ export default class quotations {
                     { 'customer.name': { $regex: regex } },
                     { 'customer.code': { $regex: regex } },
                     { products: { $elemMatch: { productDescription: { $regex: regex } } } },
+                    { products: { $elemMatch: { processes: { $elemMatch: { description: { $regex: regex } } } } } },
                     { customerNote: { $regex: regex } }
                 ]
             });
