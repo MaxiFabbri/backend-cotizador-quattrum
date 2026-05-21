@@ -54,6 +54,7 @@ export function setupWebSocketServer(io) {
 
     // 🔹 Desconexión
     socket.on("disconnect", () => {
+      console.log("Cliente Desconectado: ", socket.id, " - ", userName);
       usersMap.forEach((value, key) => {
         if (value === socket.id) {
           usersMap.delete(key);
