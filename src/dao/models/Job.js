@@ -102,6 +102,7 @@ const schema = new mongoose.Schema({
       "Listo",
       "Entregado",
       "Cerrado",
+      "Reclamo",
       "Anulado",
     ], // Opciones permitidas
     default: "Nuevo",
