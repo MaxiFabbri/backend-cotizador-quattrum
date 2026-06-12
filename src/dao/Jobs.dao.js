@@ -5,6 +5,52 @@ export default class jobs {
     return jobsModel.find(params);
   };
 
+  getAllPopulated = async () => {
+    const pipeline = [];
+    // Lookup de productos
+    pipeline.push({
+      $lookup: {
+        from: "jobproducts",
+        localField: "_id",
+        foreignField: "jobId",
+        as: "jobProducts",
+      },
+    });
+
+    // Proyección de campos
+    pipeline.push({
+      $project: {
+        _id: 1,
+        approvalDate: 1,
+        exchangeRate: 1,
+        jobStatus: 1,
+
+        // proyectar solo ciertos campos de jobProducts
+        jobProducts: {
+          $map: {
+            input: "$jobProducts",
+            as: "jp",
+            in: {
+              _id: "$$jp._id",
+              quantity: "$$jp.quantity",
+              unitSellingPrice: "$$jp.unitSellingPrice",
+              jobProductDescription: "$$jp.jobProductDescription",
+              totalProductCost: "$$jp.totalProductCost",
+            },
+          },
+        },
+      },
+    });
+
+    pipeline.push({
+      $sort: { approvalDate: 1 }, // -1 = descendente (más nuevo primero)
+    });
+
+    // Ejecutar agregación
+    const jobs = await jobsModel.aggregate(pipeline);
+    return jobs;
+  }
+
   getBy = (params) => {
     return jobsModel.findOne(params);
   };

@@ -4,6 +4,9 @@ export default class JobRepository extends GenericRepository{
     constructor(dao){
         super(dao);
     }
+    getAllJobsPopulated = () => {
+        return this.dao.getAllPopulated();
+    }
     getJobById = (id) =>{
         return this.getBy({_id:id})
     }

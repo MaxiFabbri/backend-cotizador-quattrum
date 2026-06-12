@@ -2,6 +2,7 @@ import CustomRouter from "../../utils/CustomRouter.util.js";
 import { 
     createJob, 
     readJob,
+    readJobsPopulated,
     readJobById,
     readJobByIdPopulated,
     readJobPopulatedPaginated,
@@ -19,6 +20,7 @@ class JobsApiRouter extends CustomRouter {
     init = () => {
         this.create("/", ["USER", "ADMIN"], createJob);
         this.read("/", ["USER", "ADMIN"], readJob);
+        this.read("/products/", ["USER", "ADMIN"], readJobsPopulated);
         this.read("/populated/:id", ["USER", "ADMIN"], readJobByIdPopulated);
         this.read("/paginated/", ["USER", "ADMIN"], readJobPopulatedPaginated);
         this.read("/:id", ["USER", "ADMIN"], readJobById);
