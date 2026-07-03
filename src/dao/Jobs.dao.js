@@ -132,16 +132,16 @@ export default class jobs {
 
     // Filtro por nombre parcial (name) y estado (quoteStatus)
     const matchConditions = [];
-
+    console.log("jobs Dao: ", params.name)
     if (params.name) {
       matchConditions.push({
         $or: [
           { "customer.name": params.name },
           { "customer.code": params.name },
+          { "jobNotes": params.name },
           { "jobProducts.jobProductDescription": params.name },
-          {
-            jobProcesses: { $elemMatch: { supplierName: params.name } },
-          },
+          { "jobProducts.jobProductNote": params.name },
+          { jobProcesses: { $elemMatch: { supplierName: params.name } } },
         ],
       });
     }
