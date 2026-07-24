@@ -1,5 +1,5 @@
 import CustomRouter from "../../utils/CustomRouter.util.js";
-import { createPresupuesto, getPresupuestos } from "../../controllers/xubio.controllers.js";
+import { createPresupuesto } from "../../controllers/xubio.controllers.js";
 
 class XubioApiRouter extends CustomRouter {
     constructor() {
@@ -8,7 +8,6 @@ class XubioApiRouter extends CustomRouter {
     }
     init = () => {
         this.create("/", ["USER", "ADMIN"], createPresupuesto);
-        this.read("/", ["USER", "ADMIN"], getPresupuestos);
     }
 }
 

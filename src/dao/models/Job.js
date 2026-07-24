@@ -182,7 +182,12 @@ const schema = new mongoose.Schema({
   updatedAt: {
     type: Date,
     required: false,
-  }
+  },
+  createdInXubio: {
+    type: Boolean,
+    required: false,
+    default: false
+  },
 });
 
 schema.plugin(mongoosePaginate);
