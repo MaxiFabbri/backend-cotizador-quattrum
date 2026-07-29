@@ -45,22 +45,39 @@ export async function getCustomerId(cuit) {
     });
 
     if (!response.ok) {
-      throw new Error(
-        `Request failed with status ${response.status} - ${response.statusText}`
-      );
+      return {
+        status: response.status,
+        id: 0,
+        message: `Error en la consulta: ${response.status} - ${response.statusText}`,
+      };
     }
+
     const data = await response.json();
 
-    if (Array.isArray(data) && data.length !== 1) {
-      throw new Error("No se encontró ningún cliente con ese CUIT");
+    if (!Array.isArray(data) || data.length !== 1) {
+      return {
+        status: 404,
+        id: 0,
+        message: "No se encontró ningún cliente con ese CUIT",
+      };
     }
-    const result = data[0].cliente_id
-    return result;
+
+    const result = data[0].cliente_id;
+    return {
+      status: 200,
+      id: result,
+      message: "CUSTOMER FOUND"
+    };
   } catch (err) {
     console.error("Error en getCustomerId:", err);
-    throw err;
+    return {
+      status: 500,
+      id: 0,
+      message: "Error interno al consultar el cliente",
+    };
   }
 }
+
 
 export async function getCustomerData(id) {
   const token = await getAccessToken();
