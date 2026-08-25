@@ -16,8 +16,8 @@ import jobProductsApiRouter from "./jobProducts.api.js";
 import jobProcessesApiRouter from "./jobProcesses.api.js";
 import jobsActionsApiRouter from "./jobsActions.api.js";
 import messagesApiRouter from "./messages.api.js";
-import xubioApiRouter from "./xubio.api.js"
-
+import xubioApiRouter from "./xubio.api.js";
+import utilityTablesApiRouter from "./utilityTables.api.js"; // 👈 nuevo import
 
 class ApiRouter extends CustomRouter {
   constructor() {
@@ -41,7 +41,8 @@ class ApiRouter extends CustomRouter {
     this.use("/job-processes", ["PUBLIC"], jobProcessesApiRouter);
     this.use("/jobs-actions", ["PUBLIC"], jobsActionsApiRouter);
     this.use("/messages", ["PUBLIC"], messagesApiRouter);
-    this.use("/xubio", ["PUBLIC"], xubioApiRouter)
+    this.use("/xubio", ["PUBLIC"], xubioApiRouter);
+    this.use("/utility-tables", ["PUBLIC"], utilityTablesApiRouter);
   };
 }
 

@@ -13,6 +13,7 @@ import JobProducts from "../dao/JobProducts.dao.js";
 import JobProcesses from "../dao/JobProcesses.dao.js";
 import JobActions from "../dao/JobActions.dao.js";
 import Messages from "../dao/Messages.dao.js";
+import UtilityTables from "../dao/UtilityTables.dao.js";
 
 import UserRepository from "../repository/UserRepository.js";
 import CustomerPaymentMethodRepository from "../repository/CustomerPaymentMethodRepository.js";
@@ -29,6 +30,7 @@ import JobProductRepository from "../repository/JobProductRepository.js";
 import JobProcessRepository from "../repository/JobProcessRepository.js";
 import JobActionsRepository from "../repository/JobActionRepository.js";
 import MessagesRepository from "../repository/MessageRepository.js";
+import UtilityTableRepository from "../repository/UtilityTableRepository.js"
 
 export const usersService = new UserRepository(new Users());
 export const customerPaymentMethodService = new CustomerPaymentMethodRepository(new CustomerPaymentMethods());
@@ -45,3 +47,4 @@ export const jobProductService = new JobProductRepository(new JobProducts());
 export const jobProcessService = new JobProcessRepository(new JobProcesses());
 export const jobActionsService = new JobActionsRepository(new JobActions());
 export const messagesService = new MessagesRepository(new Messages());
+export const utilityTablesService = new UtilityTableRepository(new UtilityTables())
