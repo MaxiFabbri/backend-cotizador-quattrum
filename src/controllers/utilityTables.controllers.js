@@ -23,79 +23,55 @@ async function readUtilityTableById(req, res) {
   }
 }
 
-// // Crear una nueva tabla
+// Crear una Tabla
 async function createUtilityTable(req, res) {
-//   try {
-//     const message = "UTILITY TABLE CREATED";
-//     const response = await utilityTablesService.create(req.body);
-//     return res.status(201).json({ response, message });
-//   } catch (error) {
-//     return res.status(500).json({ error: error.message });
-//   }
-// }
   try {
-    const { tableName, rows, isDefault = false } = req.body;
-    console.log("UT controllers: ", tableName, rows, isDefault)
-    // Buscar si ya existe una default activa
-    const currentDefault = await utilityTablesService.getBy({
-      isDefault: true,
-    });
-
-    if (!currentDefault) {
-      // No hay default → forzar esta como default
-      const response = await utilityTablesService.create({
-        tableName,
-        rows,
-        isDefault: true,
-        isActive: true,
-      });
-      return res
-        .status(201)
-        .json({ response, message: "UTILITY TABLE CREATED AS DEFAULT" });
-    }
-
-    if (isDefault) {
-      // Si viene marcada como default → desactivar la anterior
-      await utilityTablesService.update(currentDefault._id, {
-        isDefault: false,
-      });
-    }
-
-    // Crear la nueva tabla
+    const { tableName, rows } = req.body;
+    const currentDefault = await utilityTablesService.getBy({ isDefault: true });
     const response = await utilityTablesService.create({
       tableName,
       rows,
-      isDefault,
-      isActive: true,
+      // Mantiene un default al crear la primera tabla; las siguientes nacen false.
+      isDefault: !currentDefault,
     });
 
     return res.status(201).json({ response, message: "UTILITY TABLE CREATED" });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ error: "A default utility table already exists." });
+    }
     return res.status(500).json({ error: error.message });
   }
 }
-
 
 // Actualizar una tabla
 async function updateUtilityTable(req, res) {
   try {
     const { id } = req.params;
-    const message = "UTILITY TABLE UPDATED";
+    if (Object.hasOwn(req.body, "isDefault")) {
+      return res.status(400).json({
+        error: "Use PUT /utility-tables/:id/default to change the default table.",
+      });
+    }
+
     const response = await utilityTablesService.update(id, req.body);
-    return res.status(200).json({ response, message });
+    if (!response) return res.status(404).json({ error: "Utility table not found." });
+    return res.status(200).json({ response, message: "UTILITY TABLE UPDATED" });
   } catch (error) {
     return res.status(500).json({ error: error.message });
   }
 }
 
-// Eliminar una tabla
-async function deleteUtilityTable(req, res) {
+async function setDefaultUtilityTable(req, res) {
   try {
     const { id } = req.params;
-    const message = "UTILITY TABLE DELETED";
-    const response = await utilityTablesService.delete(id);
-    return res.status(200).json({ response, message });
+    const response = await utilityTablesService.setDefault(id);
+    if (!response) return res.status(404).json({ error: "Utility table not found." });
+    return res.status(200).json({ response, message: "DEFAULT UTILITY TABLE UPDATED" });
   } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ error: "Could not set the default utility table." });
+    }
     return res.status(500).json({ error: error.message });
   }
 }
@@ -105,5 +81,5 @@ export {
   readUtilityTableById,
   createUtilityTable,
   updateUtilityTable,
-  deleteUtilityTable,
+  setDefaultUtilityTable,
 };

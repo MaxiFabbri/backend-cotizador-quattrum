@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import UtilityTableModel from "./models/UtilityTable.js";
 
 export default class UtilityTables {
@@ -28,5 +29,34 @@ export default class UtilityTables {
   // Eliminar una tabla por ID
   delete = (id) => {
     return UtilityTableModel.findByIdAndDelete(id);
+  };
+
+  // Cambiar el default de forma atómica para toda la colección
+  setDefault = async (id) => {
+    const session = await mongoose.startSession();
+    let updatedTable = null;
+
+    try {
+      await session.withTransaction(async () => {
+        const targetTable = await UtilityTableModel.findById(id).session(session);
+        if (!targetTable) return;
+
+        await UtilityTableModel.updateMany(
+          { isDefault: true },
+          { $set: { isDefault: false } },
+          { session }
+        );
+
+        updatedTable = await UtilityTableModel.findByIdAndUpdate(
+          id,
+          { $set: { isDefault: true } },
+          { new: true, runValidators: true, session }
+        );
+      });
+
+      return updatedTable;
+    } finally {
+      await session.endSession();
+    }
   };
 }

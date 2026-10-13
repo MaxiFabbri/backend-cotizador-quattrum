@@ -4,7 +4,7 @@ import {
   readUtilityTableById,
   createUtilityTable,
   updateUtilityTable,
-  deleteUtilityTable,
+  setDefaultUtilityTable,
 } from "../../controllers/utilityTables.controllers.js";
 
 class UtilityTablesApiRouter extends CustomRouter {
@@ -23,11 +23,10 @@ class UtilityTablesApiRouter extends CustomRouter {
     // Crear una nueva tabla
     this.create("/", ["ADMIN"], createUtilityTable);
 
+    // Esta ruta debe ir antes de la ruta genérica de actualización.
+    this.update("/:id/default", ["ADMIN"], setDefaultUtilityTable);
     // Actualizar una tabla existente
     this.update("/:id", ["ADMIN"], updateUtilityTable);
-
-    // Eliminar una tabla
-    this.destroy("/:id", ["ADMIN"], deleteUtilityTable);
   };
 }
 

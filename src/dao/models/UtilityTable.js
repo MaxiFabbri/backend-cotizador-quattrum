@@ -6,7 +6,6 @@ const schema = new mongoose.Schema(
   {
     tableName: { type: String, required: true },
     isDefault: { type: Boolean, default: false },
-    isActive: { type: Boolean, default: true },
     rows: [
       {
         upTo: { type: Number, required: true },
@@ -19,6 +18,14 @@ const schema = new mongoose.Schema(
     ],
   },
   { timestamps: true }
+);
+schema.index(
+  { isDefault: 1 },
+  {
+    unique: true,
+    partialFilterExpression: { isDefault: true },
+    name: "unique_default_utility_table",
+  }
 );
 
 const UtilityTableModel = mongoose.model(collection, schema);

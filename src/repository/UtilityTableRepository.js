@@ -7,4 +7,5 @@ export default class UtilityTableRepository extends GenericRepository {
   // Por ahora no agregamos nada extra.
   // Si mañana necesitás algo específico (ej. buscar por temporada),
   // lo definís acá como un método adicional.
+  setDefault = (id) => this.dao.setDefault(id);
 }
