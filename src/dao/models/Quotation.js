@@ -12,6 +12,10 @@ const schema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Customers'
     },
+    utilityTableId: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'UtilityTable'
+    },
     customerNote: {
         type: String,
         required: false

@@ -32,6 +32,11 @@ const schema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: "Customers",
   },
+  utilityTableId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "UtilityTable",
+    required: false,
+  },
   paymentMethodId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "CustomerPaymentMethod",
