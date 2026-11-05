@@ -2,9 +2,21 @@
 import quotationModel from "./models/Quotation.js";
 
 export default class quotations {
-  getMonthlyMetrics = () => {
+  getMonthlyMetrics = ({ fromMonth, toMonth } = {}) => {
+    const timezone = "America/Argentina/Buenos_Aires";
+    const monthStart = (month) => ({
+      $dateFromString: { dateString: `${month}-01T00:00:00`, timezone },
+    });
+    const boundaries = [];
+    if (fromMonth) boundaries.push({ $gte: ["$date", monthStart(fromMonth)] });
+    if (toMonth) {
+      boundaries.push({
+        $lt: ["$date", { $dateAdd: { startDate: monthStart(toMonth), unit: "month", amount: 1, timezone } }],
+      });
+    }
     return quotationModel.aggregate([
       { $match: { date: { $type: "date" } } },
+      ...(boundaries.length ? [{ $match: { $expr: { $and: boundaries } } }] : []),
       {
         $lookup: {
           from: "products",

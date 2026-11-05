@@ -7,8 +7,8 @@ export default class QuotationRepository extends GenericRepository{
     getAllQuotationsPopulated = () =>{
         return this.dao.getQuotationsWithCustomerDetails() 
     }
-    getMonthlyMetrics = () => {
-        return this.dao.getMonthlyMetrics();
+    getMonthlyMetrics = (range) => {
+        return this.dao.getMonthlyMetrics(range);
     }
     getQuotationsByIdPopulated = (id) =>{
         return this.dao.getOneQuotationByIdwithCustomerDetails(id)

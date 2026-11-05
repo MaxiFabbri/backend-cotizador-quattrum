@@ -1,4 +1,5 @@
 import { quotationService, customerService, productService, processService, usersActionsService } from "../services/index.service.js";
+import { parseMonthlyMetricsRange } from "../utils/monthlyMetrics.util.js";
 
 
 async function createQuotation(req, res) {
@@ -31,7 +32,13 @@ async function readQuotation(req, res) {
 }
 
 async function readQuotationsMonthlyMetrics(req, res) {
-    const response = await quotationService.getMonthlyMetrics();
+    let range;
+    try {
+        range = parseMonthlyMetricsRange(req.query);
+    } catch (error) {
+        return res.status(400).json({ message: error.message });
+    }
+    const response = await quotationService.getMonthlyMetrics(range);
     return res.status(200).json({ response, message: "QUOTATIONS MONTHLY METRICS FOUND" });
 }
 async function readQuotationByIdPopulated(req, res) {
