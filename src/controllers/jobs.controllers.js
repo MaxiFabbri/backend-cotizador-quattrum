@@ -39,6 +39,11 @@ async function readJobsPopulated(req, res) {
   return res.status(200).json({ response, message });
 }
 
+async function readJobsMonthlyMetrics(req, res) {
+  const response = await jobService.getMonthlyMetrics();
+  return res.status(200).json({ response, message: "JOBS MONTHLY METRICS FOUND" });
+}
+
 async function readJobById(req, res) {
   const { id } = req.params;
   const message = "JOB FOUND";
@@ -168,6 +173,7 @@ export {
   createJob,
   readJob,
   readJobsPopulated,
+  readJobsMonthlyMetrics,
   readJobById,
   readJobByIdPopulated,
   readJobPopulatedPaginated,

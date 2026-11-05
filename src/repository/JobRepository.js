@@ -7,6 +7,9 @@ export default class JobRepository extends GenericRepository{
     getAllJobsPopulated = () => {
         return this.dao.getAllPopulated();
     }
+    getMonthlyMetrics = () => {
+        return this.dao.getMonthlyMetrics();
+    }
     getJobById = (id) =>{
         return this.getBy({_id:id})
     }

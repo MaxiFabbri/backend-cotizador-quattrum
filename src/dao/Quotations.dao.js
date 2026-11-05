@@ -2,6 +2,46 @@
 import quotationModel from "./models/Quotation.js";
 
 export default class quotations {
+  getMonthlyMetrics = () => {
+    return quotationModel.aggregate([
+      { $match: { date: { $type: "date" } } },
+      {
+        $lookup: {
+          from: "products",
+          localField: "_id",
+          foreignField: "quotationId",
+          pipeline: [{ $count: "total" }],
+          as: "productCount",
+        },
+      },
+      {
+        $group: {
+          _id: {
+            $dateToString: {
+              format: "%Y-%m",
+              date: "$date",
+              timezone: "America/Argentina/Buenos_Aires",
+            },
+          },
+          quotations: { $sum: 1 },
+          customerIds: { $addToSet: { $ifNull: ["$customerId", null] } },
+          // Count product rows, not the sum of their quantities.
+          products: { $sum: { $ifNull: [{ $arrayElemAt: ["$productCount.total", 0] }, 0] } },
+        },
+      },
+      { $sort: { _id: 1 } },
+      {
+        $project: {
+          _id: 0,
+          month: "$_id",
+          quotations: 1,
+          customers: { $size: { $setDifference: ["$customerIds", [null]] } },
+          products: 1,
+        },
+      },
+    ]);
+  };
+
   get = (params) => {
     return quotationModel.find(params);
   };

@@ -2,6 +2,7 @@ import CustomRouter from "../../utils/CustomRouter.util.js";
 import { 
     createQuotation, 
     readQuotation,
+    readQuotationsMonthlyMetrics,
     readQuotationPopulated,
     readQuotationPopulatedFiltered,
     readQuotationByIdPopulated,
@@ -22,6 +23,7 @@ class QuotationsApiRouter extends CustomRouter {
     init = () => {
         this.create("/", ["USER", "ADMIN"], createQuotation);
         this.read("/", ["USER", "ADMIN"], readQuotation);
+        this.read("/metrics/monthly", ["USER", "ADMIN"], readQuotationsMonthlyMetrics);
         this.read("/filtered", ["USER", "ADMIN"], readQuotationPopulatedFiltered);
         this.read("/populated/", ["USER", "ADMIN"], readQuotationPopulated);
         this.read("/populated/:id", ["USER", "ADMIN"], readQuotationByIdPopulated);

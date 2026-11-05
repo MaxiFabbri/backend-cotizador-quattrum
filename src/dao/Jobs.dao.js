@@ -1,6 +1,57 @@
 import jobsModel from "./models/Job.js";
 
 export default class jobs {
+  getMonthlyMetrics = () => {
+    return jobsModel.aggregate([
+      { $match: { jobStatus: { $ne: "Anulado" }, approvalDate: { $type: "date" } } },
+      {
+        $lookup: {
+          from: "jobproducts",
+          localField: "_id",
+          foreignField: "jobId",
+          as: "jobProducts",
+        },
+      },
+      {
+        $project: {
+          month: {
+            $dateToString: {
+              format: "%Y-%m",
+              date: "$approvalDate",
+              timezone: "America/Argentina/Buenos_Aires",
+            },
+          },
+          amount: {
+            $sum: {
+              $map: {
+                input: "$jobProducts",
+                as: "product",
+                // Match Math.round per product in Dashboard, rather than
+                // MongoDB $round, which rounds ties to the nearest even value.
+                in: {
+                  $floor: {
+                    $add: [
+                      {
+                        $divide: [
+                          { $multiply: ["$$product.quantity", "$$product.unitSellingPrice", "$exchangeRate"] },
+                          1000,
+                        ],
+                      },
+                      0.5,
+                    ],
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+      { $group: { _id: "$month", amount: { $sum: "$amount" }, jobs: { $sum: 1 } } },
+      { $sort: { _id: 1 } },
+      { $project: { _id: 0, month: "$_id", amount: 1, jobs: 1 } },
+    ]);
+  };
+
   get = (params) => {
     return jobsModel.find(params);
   };

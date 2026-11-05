@@ -29,6 +29,11 @@ async function readQuotation(req, res) {
     const response = await quotationService.getAll();
     return res.status(200).json({ response, message });
 }
+
+async function readQuotationsMonthlyMetrics(req, res) {
+    const response = await quotationService.getMonthlyMetrics();
+    return res.status(200).json({ response, message: "QUOTATIONS MONTHLY METRICS FOUND" });
+}
 async function readQuotationByIdPopulated(req, res) {
     const { id } = req.params;
     const message = "QUOTATIONS FOUND";
@@ -199,6 +204,7 @@ async function destroyQuotation(req, res) {
 
 
 export {
+    readQuotationsMonthlyMetrics,
     createQuotation, 
     readQuotation,
     readQuotationPopulated,
